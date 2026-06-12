@@ -95,6 +95,17 @@ const DynamicIcon = ({ name, ...props }: { name: string; [key: string]: unknown 
   return <Icon {...props} />;
 };
 
+const PRODUCT_VARIANTS_SCROLL_ID = 'storify-product-variants';
+
+const pulseScrollToElement = (id: string) => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  el.classList.remove('animate-pulse');
+  void el.offsetWidth;
+  el.classList.add('animate-pulse');
+};
+
 const ProductDetailsSettingsSection: React.FC<{ section: any }> = ({ section }) => {
   const {
     productId,
@@ -148,6 +159,12 @@ const ProductDetailsSettingsSection: React.FC<{ section: any }> = ({ section }) 
     resolveSchemeFromSettings((settings ?? {}) as Record<string, unknown>, sectionSchemeId),
   );
 
+  const productColorMap = useMemo(() => extractProductColorMap(product as Product), [product]);
+  const visibleOptions = useMemo(
+    () => (Array.isArray(product?.options) ? product.options.filter((opt) => String(opt?.name || '').trim() !== COLOR_META_OPTION_NAME) : []),
+    [product?.options]
+  );
+
   useEffect(() => {
     if (!product) {
       setSelectedVariantId(null);
@@ -162,9 +179,9 @@ const ProductDetailsSettingsSection: React.FC<{ section: any }> = ({ section }) 
       setError(null);
       return;
     }
-    const first = variants[0] as ProductVariant;
-    const id = String(first.id ?? '').trim() || null;
-    setSelectedVariantId(id);
+    // Do NOT auto-select the first variant
+    setSelectedVariantId(null);
+    setSelectedOptions({});
     setError(null);
   }, [product?.id, apiProduct]);
 
@@ -175,8 +192,16 @@ const ProductDetailsSettingsSection: React.FC<{ section: any }> = ({ section }) 
       const found = product.variants.find((v) => String(v?.id).trim() === raw);
       if (found) return found as ProductVariant;
     }
+    
+    // If we have options, wait until all are selected
+    if (visibleOptions.length > 0) {
+      const allSelected = visibleOptions.every((opt) => opt.name && selectedOptions[opt.name]);
+      if (!allSelected) return null;
+      return findSelectedVariant(product, selectedOptions) as unknown as ProductVariant | null;
+    }
+
     return (product.variants[0] as ProductVariant) ?? null;
-  }, [product, selectedVariantId]);
+  }, [product, selectedVariantId, selectedOptions, visibleOptions]);
 
   useEffect(() => {
     const trackedProductId = String(product?.id ?? productId ?? '').trim();
@@ -255,12 +280,6 @@ const ProductDetailsSettingsSection: React.FC<{ section: any }> = ({ section }) 
   const relatedTitle = (content.related_products_title as string) || t('product_related_title');
   const recentlyViewedTitle = (content.recently_viewed_title as string) || t('recently_viewed_default');
 
-  const productColorMap = useMemo(() => extractProductColorMap(product as Product), [product]);
-  const visibleOptions = useMemo(
-    () => (Array.isArray(product?.options) ? product.options.filter((opt) => String(opt?.name || '').trim() !== COLOR_META_OPTION_NAME) : []),
-    [product?.options]
-  );
-
   const relatedProducts = useMemo(() => {
     if (!product || !allProducts) return [];
     return allProducts
@@ -315,9 +334,27 @@ const ProductDetailsSettingsSection: React.FC<{ section: any }> = ({ section }) 
   const currentPrice = selectedVariant?.price ?? product.price ?? 0;
   const currentCompareAtPrice = selectedVariant?.compareAtPrice ?? product.compareAtPrice;
 
+  const hasVariants = Array.isArray(product.variants) && product.variants.length > 0;
+  const needsVariantSelection = hasVariants && visibleOptions.length > 0;
+  const variantsSelected =
+    !needsVariantSelection ||
+    (visibleOptions.every((opt) => opt.name && selectedOptions[opt.name]) && !!selectedVariant);
+  const canAddToCart = variantsSelected && maxOrderable > 0;
+
   const handleAddToCart = () => {
     const hasVariants = Array.isArray(product.variants) && product.variants.length > 0;
-    if (hasVariants && (!selectedVariantId || !selectedVariant)) {
+    if (hasVariants && visibleOptions.length > 0) {
+      const missingOptions = visibleOptions.filter(opt => opt.name && !selectedOptions[opt.name]);
+      if (missingOptions.length > 0) {
+        setError(t('quick_view_select_variants'));
+        pulseScrollToElement(PRODUCT_VARIANTS_SCROLL_ID);
+        return;
+      }
+      if (!selectedVariantId || !selectedVariant) {
+        setError(t('product_variant_resolve_error'));
+        return;
+      }
+    } else if (hasVariants && (!selectedVariantId || !selectedVariant)) {
       setError(t('product_variant_resolve_error'));
       return;
     }
@@ -479,7 +516,7 @@ const ProductDetailsSettingsSection: React.FC<{ section: any }> = ({ section }) 
       )}
 
       {visibleOptions.length > 0 && (
-        <div className="space-y-10 py-8 border-t border-neutral-100">
+        <div id={PRODUCT_VARIANTS_SCROLL_ID} className="space-y-10 py-8 border-t border-neutral-100">
           {visibleOptions.map((option) => {
             if (!option || !option.name) return null;
             const optionIsColor = isColorOptionName(option.name);
@@ -583,15 +620,15 @@ const ProductDetailsSettingsSection: React.FC<{ section: any }> = ({ section }) 
             {showAddToCart && (
               <button
                 type="button" onClick={handleAddToCart} onMouseEnter={() => setIsAddToCartHover(true)} onMouseLeave={() => setIsAddToCartHover(false)}
-                disabled={isAdded || maxOrderable <= 0}
-                className={`flex-1 h-14 rounded-2xl font-black uppercase text-xs tracking-widest transition-all flex items-center justify-center gap-3 shadow-xl ${isAdded ? 'bg-green-500 text-white scale-95 shadow-green-500/20' : maxOrderable <= 0 ? 'bg-neutral-200 text-neutral-500 shadow-none cursor-not-allowed' : 'hover:-translate-y-1 active:translate-y-0'}`}
-                style={!isAdded && maxOrderable > 0 ? { background: isAddToCartHover ? 'var(--storify-btn-primary-hover-bg)' : 'var(--storify-btn-primary-bg)', color: isAddToCartHover ? 'var(--storify-btn-primary-hover-fg)' : 'var(--storify-btn-primary-fg)', boxShadow: isAddToCartHover ? '0 10px 25px color-mix(in srgb, var(--storify-btn-primary-hover-bg) 28%, transparent)' : '0 8px 20px color-mix(in srgb, var(--storify-btn-primary-bg) 24%, transparent)' } : undefined}
+                disabled={isAdded || !canAddToCart}
+                className={`flex-1 h-14 rounded-2xl font-black uppercase text-xs tracking-widest transition-all flex items-center justify-center gap-3 shadow-xl ${isAdded ? 'bg-green-500 text-white scale-95 shadow-green-500/20' : !canAddToCart ? 'bg-neutral-200 text-neutral-500 shadow-none cursor-not-allowed' : 'hover:-translate-y-1 active:translate-y-0'}`}
+                style={!isAdded && canAddToCart ? { background: isAddToCartHover ? 'var(--storify-btn-primary-hover-bg)' : 'var(--storify-btn-primary-bg)', color: isAddToCartHover ? 'var(--storify-btn-primary-hover-fg)' : 'var(--storify-btn-primary-fg)', boxShadow: isAddToCartHover ? '0 10px 25px color-mix(in srgb, var(--storify-btn-primary-hover-bg) 28%, transparent)' : '0 8px 20px color-mix(in srgb, var(--storify-btn-primary-bg) 24%, transparent)' } : undefined}
               >
                 {isAdded ? (
                   <>
                     <CheckCircle size={20} /> {t('product_added')}
                   </>
-                ) : maxOrderable <= 0 ? (
+                ) : !canAddToCart && variantsSelected ? (
                   <>{t('product_out_of_stock_short')}</>
                 ) : (
                   <>

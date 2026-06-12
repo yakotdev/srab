@@ -51,6 +51,17 @@ const resolveColorValue = (optionValue: string, colorMap: Record<string, string>
   return mapped || '';
 };
 
+const QUICK_VIEW_VARIANTS_SCROLL_ID = 'storify-quick-view-variants';
+
+const pulseScrollToElement = (id: string) => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  el.classList.remove('animate-pulse');
+  void el.offsetWidth;
+  el.classList.add('animate-pulse');
+};
+
 interface QuickViewModalProps {
   product: Product | null;
   onClose: () => void;
@@ -77,32 +88,9 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({
   );
   const productColorMap = React.useMemo(() => extractProductColorMap(product), [product]);
 
-  // Initialize options when product changes - try to pick the first valid variant's options
+  // Initialize options when product changes - do NOT auto-select
   useEffect(() => {
-    if (product && visibleOptions.length > 0) {
-      const initialOptions: Record<string, string> = {};
-      
-      // Try to find the first variant and use its options as default
-      const firstVariant = Array.isArray(product.variants) ? product.variants[0] : null;
-      
-      if (firstVariant && firstVariant.options && typeof firstVariant.options === 'object') {
-        visibleOptions.forEach(opt => {
-          if (opt && opt.name) {
-            initialOptions[opt.name] = firstVariant.options?.[opt.name] || opt.values[0];
-          }
-        });
-      } else {
-        // Fallback to first value of each option
-        visibleOptions.forEach(opt => {
-          if (opt && opt.name && Array.isArray(opt.values) && opt.values.length > 0) {
-            initialOptions[opt.name] = opt.values[0];
-          }
-        });
-      }
-      setSelectedOptions(initialOptions);
-    } else {
-      setSelectedOptions({});
-    }
+    setSelectedOptions({});
     setError(null);
   }, [product?.id, visibleOptions]);
 
@@ -110,16 +98,29 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({
     if (!product || !Array.isArray(product.variants) || product.variants.length === 0) return null;
     const hasOptionDefs = visibleOptions.length > 0;
     if (hasOptionDefs) {
+      const allSelected = visibleOptions.every((opt) => opt.name && selectedOptions[opt.name]);
+      if (!allSelected) return null;
       return findSelectedVariant(product, selectedOptions) as unknown as ProductVariant | null;
     }
     return (product.variants[0] as ProductVariant) ?? null;
-  }, [product, selectedOptions, visibleOptions.length]);
+  }, [product, selectedOptions, visibleOptions]);
 
   if (!product) return null;
 
   const isWishlisted = wishlist.some(p => p && p.id === product.id);
   const currentPrice = selectedVariant?.price ?? product.price ?? 0;
   const currentCompareAtPrice = selectedVariant?.compareAtPrice ?? product.compareAtPrice;
+
+  const hasVariants = Array.isArray(product.variants) && product.variants.length > 0;
+  const needsVariantSelection = hasVariants && visibleOptions.length > 0;
+  const variantsSelected =
+    !needsVariantSelection ||
+    (visibleOptions.every((opt) => opt.name && selectedOptions[opt.name]) && !!selectedVariant);
+  const maxQty = getMaxOrderableQuantity(
+    product as Parameters<typeof getMaxOrderableQuantity>[0],
+    hasVariants ? selectedVariant?.id : undefined
+  );
+  const canAddToCart = variantsSelected && maxQty > 0;
 
   const handleShare = () => {
     const shareUrl = `${window.location.origin}/product/${product.id}`;
@@ -137,7 +138,13 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({
 
   const handleAddToCart = () => {
     const hasVariants = Array.isArray(product.variants) && product.variants.length > 0;
-    if (hasVariants) {
+    if (hasVariants && visibleOptions.length > 0) {
+      const missingOptions = visibleOptions.filter(opt => opt.name && !selectedOptions[opt.name]);
+      if (missingOptions.length > 0) {
+        setError(t('quick_view_select_variants'));
+        pulseScrollToElement(QUICK_VIEW_VARIANTS_SCROLL_ID);
+        return;
+      }
       if (!selectedVariant) {
         setError(t('quick_view_select_variants'));
         return;
@@ -182,17 +189,17 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({
             initial={{ scale: 0.9, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.9, opacity: 0, y: 20 }}
-            className="relative w-full max-w-5xl bg-white rounded-[2.5rem] overflow-hidden shadow-2xl flex flex-col md:flex-row z-10"
+            className="relative w-full max-w-5xl bg-white rounded-3xl md:rounded-[2.5rem] overflow-hidden shadow-2xl flex flex-col md:flex-row z-10 max-h-[90vh] md:max-h-none"
           >
             <button 
               onClick={onClose}
-              className="absolute top-6 end-6 z-30 w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-brand-primary hover:bg-brand-accent hover:text-white transition-all shadow-lg"
+              className="absolute top-4 end-4 md:top-6 md:end-6 z-30 w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-brand-primary hover:bg-brand-accent hover:text-white transition-all shadow-lg"
             >
               <X size={20} />
             </button>
 
             {/* Image Section */}
-            <div className={`w-full md:w-1/2 relative bg-neutral-50 border-e border-neutral-100 ${productAspectClass}`}>
+            <div className={`w-full md:w-1/2 relative bg-neutral-50 border-b md:border-b-0 md:border-e border-neutral-100 ${productAspectClass} shrink-0`}>
               <img 
                 src={selectedVariant?.image || product.image} 
                 alt={product.name} 
@@ -207,9 +214,9 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({
             </div>
 
             {/* Content Section */}
-            <div className={`w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center ${isRtl ? 'text-start' : 'text-start'} bg-white`}>
-              <div className="space-y-8">
-                <div className="space-y-4">
+            <div className={`w-full md:w-1/2 p-6 md:p-12 flex flex-col justify-start md:justify-center ${isRtl ? 'text-start' : 'text-start'} bg-white overflow-y-auto`}>
+              <div className="space-y-6 md:space-y-8">
+                <div className="space-y-3 md:space-y-4">
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-1 text-amber-400">
                       <Star size={14} fill="currentColor" />
@@ -225,14 +232,14 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({
                       {product.category || t('product_featured_badge')}
                     </span>
                   </div>
-                  <h2 className="text-4xl md:text-5xl font-black tracking-tighter leading-tight text-brand-primary">
+                  <h2 className="text-2xl md:text-4xl font-black tracking-tighter leading-tight text-brand-primary">
                     {selectedVariant?.name || product.name}
                   </h2>
-                  <div className="flex items-center justify-end gap-4">
+                  <div className="flex items-center justify-end gap-3 md:gap-4">
                     {currentCompareAtPrice != null && currentCompareAtPrice > currentPrice && (
-                      <span className="text-xl text-neutral-300 line-through font-bold">{formatPrice(currentCompareAtPrice, store?.currency)}</span>
+                      <span className="text-lg md:text-xl text-neutral-300 line-through font-bold">{formatPrice(currentCompareAtPrice, store?.currency)}</span>
                     )}
-                    <span className="text-3xl font-black text-brand-accent">{formatPrice(currentPrice, store?.currency)}</span>
+                    <span className="text-2xl md:text-3xl font-black text-brand-accent">{formatPrice(currentPrice, store?.currency)}</span>
                   </div>
                 </div>
 
@@ -245,7 +252,7 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({
 
                 {/* Variants Selection */}
                 {visibleOptions.length > 0 && (
-                  <div className="space-y-8 py-6 border-t border-neutral-100">
+                  <div id={QUICK_VIEW_VARIANTS_SCROLL_ID} className="space-y-8 py-6 border-t border-neutral-100">
                     {visibleOptions.map((option) => {
                       if (!option || !option.name) return null;
                       const optionIsColor = isColorOptionName(option.name);
@@ -369,48 +376,37 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({
                   </div>
                 )}
 
-                <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                  {(() => {
-                    const hasVariants = Array.isArray(product.variants) && product.variants.length > 0;
-                    const maxQty = getMaxOrderableQuantity(
-                      product as Parameters<typeof getMaxOrderableQuantity>[0],
-                      hasVariants ? selectedVariant?.id : undefined
-                    );
-                    const isOutOfStock = maxQty <= 0;
-                    
-                    return (
-                      <button 
-                        onClick={handleAddToCart}
-                        disabled={isOutOfStock}
-                        className={`flex-1 h-14 rounded-2xl font-black uppercase text-xs tracking-widest transition-all flex items-center justify-center gap-3 shadow-xl ${
-                          isOutOfStock 
-                            ? 'bg-neutral-200 text-neutral-400 cursor-not-allowed' 
-                            : 'bg-brand-primary text-white hover:bg-brand-accent hover:-translate-y-1 shadow-brand-accent/20'
-                        }`}
-                      >
-                        <ShoppingBag size={18} />
-                        {isOutOfStock ? t('product_out_of_stock_short') : t('product_add_to_cart')}
-                      </button>
-                    );
-                  })()}
-                  <div className="flex gap-3">
+                <div className="flex gap-2 md:gap-4 pt-4">
+                  <button 
+                    onClick={handleAddToCart}
+                    disabled={!canAddToCart}
+                    className={`flex-1 h-12 md:h-14 rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-widest transition-all flex items-center justify-center gap-2 md:gap-3 shadow-xl ${
+                      !canAddToCart
+                        ? 'bg-neutral-200 text-neutral-400 cursor-not-allowed'
+                        : 'bg-brand-primary text-white hover:bg-brand-accent hover:-translate-y-1 shadow-brand-accent/20'
+                    }`}
+                  >
+                    <ShoppingBag size={18} />
+                    {!canAddToCart && variantsSelected ? t('product_out_of_stock_short') : t('product_add_to_cart')}
+                  </button>
+                  <div className="flex gap-2 md:gap-3">
                     <button 
                       onClick={() => onToggleWishlist(product)}
-                      className={`w-14 h-14 rounded-2xl border flex items-center justify-center transition-all ${isWishlisted ? 'bg-red-50 border-red-100 text-red-500' : 'border-neutral-100 text-neutral-400 hover:text-red-500 hover:border-red-100'}`}
+                      className={`w-12 h-12 md:w-14 md:h-14 rounded-2xl border flex items-center justify-center transition-all shrink-0 ${isWishlisted ? 'bg-red-50 border-red-100 text-red-500' : 'border-neutral-100 text-neutral-400 hover:text-red-500 hover:border-red-100'}`}
                     >
                       <Heart size={20} fill={isWishlisted ? "currentColor" : "none"} />
                     </button>
                     <button 
                       onClick={handleShare}
-                      className="w-14 h-14 rounded-2xl border border-neutral-100 flex items-center justify-center text-neutral-400 hover:text-brand-accent hover:border-brand-accent/20 transition-all"
+                      className="w-12 h-12 md:w-14 md:h-14 rounded-2xl border border-neutral-100 flex items-center justify-center text-neutral-400 hover:text-brand-accent hover:border-brand-accent/20 transition-all shrink-0"
                     >
                       <Share2 size={20} />
                     </button>
                   </div>
                 </div>
 
-                <div className="pt-8 border-t border-neutral-100 flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-neutral-400">
-                  <div className="flex items-center gap-6">
+                <div className="pt-6 md:pt-8 border-t border-neutral-100 flex flex-wrap items-center justify-between gap-2 text-[10px] font-black uppercase tracking-widest text-neutral-400">
+                  <div className="flex flex-wrap items-center gap-4 md:gap-6">
                     <span>SKU: {selectedVariant?.id || String(product.id).slice(-6).toUpperCase()}</span>
                     <span>{t('product_category_label')}: {product.category || t('category_uncategorized')}</span>
                   </div>
