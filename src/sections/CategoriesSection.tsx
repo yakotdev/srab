@@ -361,36 +361,37 @@ const CategoriesSection: React.FC<{ section: any }> = ({ section }) => {
 
   return (
     <section 
-      className="max-w-7xl mx-auto px-6"
       style={{ paddingTop, paddingBottom, background: 'var(--storify-bg)' }}
       dir={isRtl ? 'rtl' : 'ltr'}
     >
-      <div className="flex flex-col sm:flex-row justify-between items-end gap-4 mb-10">
-        <div className="text-center sm:text-start w-full sm:w-auto">
-          <h2 className="text-3xl font-bold" style={{ color: 'var(--storify-headings)' }}>
-            {sectionTitle}
-          </h2>
-          <p className="mt-2 text-sm" style={{ color: 'var(--storify-text)', opacity: 0.7 }}>
-            {sectionSubtitle}
-          </p>
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="flex flex-col sm:flex-row justify-between items-end gap-4 mb-10">
+          <div className="text-center sm:text-start w-full sm:w-auto">
+            <h2 className="text-3xl font-bold" style={{ color: 'var(--storify-headings)' }}>
+              {sectionTitle}
+            </h2>
+            <p className="mt-2 text-sm" style={{ color: 'var(--storify-text)', opacity: 0.7 }}>
+              {sectionSubtitle}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => navigateStorefront('/shop')}
+            className="hidden md:inline-block font-bold text-sm border-b-2 pb-1 transition"
+            style={{ color: 'var(--storify-text)', borderColor: 'var(--storify-border)' }}
+          >
+            {isRtl ? t('categories_shop_arrow_rtl') : t('categories_shop_arrow_ltr')}
+          </button>
         </div>
-        <button
-          type="button"
-          onClick={() => navigateStorefront('/shop')}
-          className="hidden md:inline-block font-bold text-sm border-b-2 pb-1 transition"
-          style={{ color: 'var(--storify-text)', borderColor: 'var(--storify-border)' }}
-        >
-          {isRtl ? t('categories_shop_arrow_rtl') : t('categories_shop_arrow_ltr')}
-        </button>
-      </div>
 
-      {isEmpty ? (
-        <div className="col-span-full text-center py-10" style={{ color: 'var(--storify-text)', opacity: 0.4 }}>
-          <p className="text-sm">{t('categories_empty')}</p>
-        </div>
-      ) : (
-        renderContent()
-      )}
+        {isEmpty ? (
+          <div className="col-span-full text-center py-10" style={{ color: 'var(--storify-text)', opacity: 0.4 }}>
+            <p className="text-sm">{t('categories_empty')}</p>
+          </div>
+        ) : (
+          renderContent()
+        )}
+      </div>
     </section>
   );
 };

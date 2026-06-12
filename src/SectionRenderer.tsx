@@ -26,6 +26,7 @@ const TrackOrderPageSection = React.lazy(() => import('./sections/TrackOrderPage
 const ProfilePageSection = React.lazy(() => import('./sections/ProfilePageSection'));
 const PolicyPageSection = React.lazy(() => import('./sections/PolicyPageSection'));
 const ProductReviewsSection = React.lazy(() => import('./sections/ProductReviewsSection'));
+const CustomerReviewsSection = React.lazy(() => import('./sections/CustomerReviewsSection'));
 const ProductCarouselSection = React.lazy(() => import('./sections/ProductCarouselSection'));
 const SlideshowSection = React.lazy(() => import('./sections/SlideshowSection'));
 const FloatingPromoSection = React.lazy(() => import('./sections/FloatingPromoSection'));
@@ -45,6 +46,7 @@ const SECTION_MAP: Record<string, React.LazyExoticComponent<React.FC<{ section: 
   EMPTY_STATE: EmptyStateSection,
   PRODUCT_DETAILS_SETTINGS: ProductDetailsSettingsSection,
   PRODUCT_REVIEWS: ProductReviewsSection,
+  CUSTOMER_REVIEWS: CustomerReviewsSection,
   SHOP_PAGE: ShopPageSection,
   ABOUT_PAGE: AboutPageSection,
   CONTACT_PAGE: ContactPageSection,

@@ -498,6 +498,38 @@ export function formatPrice(price: number | string | undefined, currency?: strin
   }
 }
 
+export async function fetchStoreReviews(
+  options?: { limit?: number; storeIdOverride?: string },
+): Promise<unknown[]> {
+  const effectiveStoreId = resolveThemeStoreId(options?.storeIdOverride, null);
+  const limit = Math.max(1, Number(options?.limit) || 50);
+
+  if (shouldUseThemeRuntimeBridge()) {
+    try {
+      const list = await themeRuntimeCall<unknown[]>('getStoreReviews', { limit });
+      return Array.isArray(list) ? list.slice(0, limit) : [];
+    } catch {
+      /* fall through */
+    }
+  }
+
+  if (isCrossOriginIframe()) {
+    return [];
+  }
+
+  if (!effectiveStoreId) return [];
+  const query = new URLSearchParams();
+  query.append('status', 'Approved');
+  const url = `/reviews?${query.toString()}`;
+  try {
+    const data = await fetchPublicApi<unknown>(url, effectiveStoreId, resolveThemeLanguage(undefined, null));
+    return normalizeListResponse(data).slice(0, limit);
+  } catch (err) {
+    console.error('Error in fetchStoreReviews:', err);
+    return [];
+  }
+}
+
 export async function fetchProductReviews(productId: string, storeIdOverride?: string): Promise<unknown[]> {
   const effectiveStoreId = resolveThemeStoreId(storeIdOverride, null);
 
