@@ -1,0 +1,14 @@
+{
+  "header": {
+    "sticky": "true",
+    "height": "normal",
+    "show_logo": "true",
+    "show_wishlist": "true",
+    "show_cart": "true"
+  },
+  "about_page": {},
+  "footer": {
+    "footer_menu_title": "عن أومينو",
+    "show_social": "true"
+  }
+}

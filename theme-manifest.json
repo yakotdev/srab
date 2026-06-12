@@ -1,0 +1,1551 @@
+{
+  "name": "Srab",
+  "version": "1.0.0",
+  "manifestVersion": 1,
+  "entry": "assets/main.js",
+  "languages": [
+    "ar",
+    "en",
+    "fr"
+  ],
+  "assets": {
+    "locales_ar": "locales/ar.json",
+    "locales_en": "locales/en.json",
+    "locales_fr": "locales/fr.json"
+  },
+  "themeSettingsGroups": [
+    {
+      "id": "layout",
+      "label": "التخطيط",
+      "description": "شكل الواجهة العام",
+      "order": 0
+    },
+    {
+      "id": "fonts",
+      "label": "الخطوط",
+      "description": "خطوط النصوص والعناوين",
+      "order": 1
+    },
+    {
+      "id": "colors",
+      "label": "مخططات الألوان",
+      "description": "ألوان الثيم المتاحة لكل قسم",
+      "order": 2
+    },
+    {
+      "id": "social",
+      "label": "وسائل التواصل",
+      "description": "روابط الحسابات الاجتماعية",
+      "order": 3
+    },
+    {
+      "id": "whatsapp",
+      "label": "واتساب",
+      "description": "زر الواتساب العائم",
+      "order": 4
+    },
+    {
+      "id": "products",
+      "label": "المنتجات والسلة",
+      "description": "عرض الصور وبطاقات المنتج ونمط السلة",
+      "order": 5
+    }
+  ],
+  "themeSettingsSchema": {
+    "borderRadius": {
+      "group": "layout",
+      "type": "select",
+      "label": "انحناء الزوايا",
+      "options": [
+        {
+          "value": "0px",
+          "label": "حادة"
+        },
+        {
+          "value": "8px",
+          "label": "صغيرة"
+        },
+        {
+          "value": "16px",
+          "label": "متوسطة"
+        },
+        {
+          "value": "24px",
+          "label": "كبيرة"
+        },
+        {
+          "value": "40px",
+          "label": "دائرية"
+        }
+      ],
+      "default": "24px"
+    },
+    "fontFamily": {
+      "group": "fonts",
+      "type": "google_font",
+      "label": "خط النصوص (الجسم)",
+      "description": "اختر خط النصوص من قائمة الخطوط العربية والعالمية.",
+      "default": "Almarai"
+    },
+    "fontFamilyHeadings": {
+      "group": "fonts",
+      "type": "google_font",
+      "label": "خط العناوين",
+      "description": "يمكن أن يطابق خط النصوص أو يختلف لتمييز العناوين.",
+      "default": "Almarai"
+    },
+    "social_facebook": {
+      "group": "social",
+      "type": "text",
+      "label": "رابط فيسبوك",
+      "default": ""
+    },
+    "social_instagram": {
+      "group": "social",
+      "type": "text",
+      "label": "رابط انستقرام",
+      "default": ""
+    },
+    "social_twitter": {
+      "group": "social",
+      "type": "text",
+      "label": "رابط تويتر",
+      "default": ""
+    },
+    "social_youtube": {
+      "group": "social",
+      "type": "text",
+      "label": "رابط يوتيوب",
+      "default": ""
+    },
+    "social_linkedin": {
+      "group": "social",
+      "type": "text",
+      "label": "رابط لينكدان",
+      "default": ""
+    },
+    "social_pinterest": {
+      "group": "social",
+      "type": "text",
+      "label": "رابط بانترست",
+      "default": ""
+    },
+    "social_tiktok": {
+      "group": "social",
+      "type": "text",
+      "label": "رابط تيكتوك",
+      "default": ""
+    },
+    "whatsapp_enable": {
+      "group": "whatsapp",
+      "type": "select",
+      "label": "تفعيل زر الواتساب العائم",
+      "options": [
+        { "value": "true", "label": "تفعيل" },
+        { "value": "false", "label": "إيقاف" }
+      ],
+      "default": "false"
+    },
+    "whatsapp_number": {
+      "group": "whatsapp",
+      "type": "text",
+      "label": "رقم الواتساب (مع رمز الدولة بدون +)",
+      "default": "",
+      "description": "مثال: 966500000000"
+    },
+    "whatsapp_message": {
+      "group": "whatsapp",
+      "type": "textarea",
+      "label": "رسالة الواتساب التلقائية",
+      "default": "مرحباً، أود الاستفسار عن المنتجات."
+    },
+    "color_schemes": {
+      "group": "colors",
+      "type": "color_schemes",
+      "label": "مخططات الألوان",
+      "description": "كل ألوان الواجهة (خلفية، نص، أزرار، روابط…) مرتبطة بالمخطط الذي تختاره لكل قسم. الخطوط تُضبط من قسم «الخطوط» أعلاه."
+    },
+    "product_image_aspect": {
+      "group": "products",
+      "type": "select",
+      "label": "نسبة صندوق صورة المنتج",
+      "description": "تُطبَّق على بطاقات المنتج، صورة المنتج الرئيسية، المعاينة السريعة، نتائج البحث، وصور السلة. الصور المصغّرة في معرض المنتج تبقى مربعة لتسهيل التصفح.",
+      "options": [
+        { "value": "1_1", "label": "1:1 (مربع)" },
+        { "value": "4_5", "label": "4:5 (وضعية أزياء — الافتراضي)" },
+        { "value": "3_4", "label": "3:4" },
+        { "value": "4_3", "label": "4:3" },
+        { "value": "16_9", "label": "16:9 (عرضي)" }
+      ],
+      "default": "4_5"
+    },
+    "product_image_fit": {
+      "group": "products",
+      "type": "select",
+      "label": "ملء إطار صورة المنتج",
+      "description": "«قص لملء الإطار» يملأ المساحة وقد يقطع أطراف الصورة. «إظهار الصورة كاملة» يحافظ على الصورة داخل الإطار مع فراغات إن لزم.",
+      "options": [
+        { "value": "cover", "label": "قص لملء الإطار" },
+        { "value": "contain", "label": "إظهار الصورة كاملة داخل الإطار" }
+      ],
+      "default": "cover"
+    },
+    "cart_style": {
+      "group": "products",
+      "type": "select",
+      "label": "نمط السلة",
+      "description": "اختر التصميم المناسب لعرض السلة الجانبية للمشترين.",
+      "options": [
+        { "value": "classic", "label": "درج جانبي كلاسيكي" },
+        { "value": "floating_glass", "label": "بطاقة زجاجية عائمة" },
+        { "value": "bottom_panel", "label": "لوحة سفلية حديثة" }
+      ],
+      "default": "classic"
+    },
+    "product_card_style": {
+      "group": "products",
+      "type": "select",
+      "label": "نمط بطاقة المنتج",
+      "description": "اختر تصميم عرض بطاقات المنتجات في الصفحة الرئيسية وصفحة المتجر.",
+      "options": [
+        { "value": "classic", "label": "كلاسيكي فاخر" },
+        { "value": "glass_modern", "label": "عصري زجاجي" },
+        { "value": "minimal", "label": "بسيط هادئ" }
+      ],
+      "default": "classic"
+    }
+  },
+  "sections": [
+    {
+      "id": "header",
+      "name": "الهيدر",
+      "component": "HEADER",
+      "group": "header_group",
+      "contentSchema": {
+        "color_scheme": {
+          "type": "select",
+          "label": "مخطط الألوان",
+          "optionsFrom": "color_schemes",
+          "default": "scheme-light"
+        },
+        "sticky": {
+          "type": "select",
+          "label": "تثبيت الهيدر",
+          "options": [
+            {
+              "value": "true",
+              "label": "نعم"
+            },
+            {
+              "value": "false",
+              "label": "لا"
+            }
+          ],
+          "default": "true"
+        },
+        "show_top_bar": {
+          "type": "select",
+          "label": "إظهار الشريط العلوي",
+          "options": [
+            { "value": "true", "label": "نعم" },
+            { "value": "false", "label": "لا" }
+          ],
+          "default": "true"
+        },
+        "top_bar_text": {
+          "type": "text",
+          "label": "نص الشريط العلوي",
+          "default": "شحن مجاني للطلبات الأكثر من 200 ريال! 🚚"
+        },
+        "height": {
+          "type": "select",
+          "label": "ارتفاع الشريط",
+          "options": [
+            { "value": "compact", "label": "مضغوط" },
+            { "value": "normal", "label": "عادي (Srab)" },
+            { "value": "large", "label": "عالي" }
+          ],
+          "default": "normal"
+        },
+        "show_logo": {
+          "type": "select",
+          "label": "إظهار الشعار",
+          "options": [
+            { "value": "true", "label": "نعم" },
+            { "value": "false", "label": "لا" }
+          ],
+          "default": "true"
+        },
+        "show_wishlist": {
+          "type": "select",
+          "label": "إظهار المفضلة",
+          "options": [
+            {
+              "value": "true",
+              "label": "نعم"
+            },
+            {
+              "value": "false",
+              "label": "لا"
+            }
+          ],
+          "default": "true"
+        },
+        "show_cart": {
+          "type": "select",
+          "label": "إظهار السلة",
+          "options": [
+            {
+              "value": "true",
+              "label": "نعم"
+            },
+            {
+              "value": "false",
+              "label": "لا"
+            }
+          ],
+          "default": "true"
+        },
+        "menu": {
+          "type": "menu",
+          "label": "قائمة الهيدر"
+        }
+      }
+    },
+    {
+      "id": "hero_slider",
+      "name": "قسم البطل الرئيسي (شرائح)",
+      "component": "HERO_SLIDER",
+      "group": "template_group",
+      "contentSchema": {
+        "color_scheme": {
+          "type": "select",
+          "label": "مخطط الألوان",
+          "translatable": false,
+          "optionsFrom": "color_schemes",
+          "default": "scheme-light"
+        },
+        "layout_style": {
+          "type": "select",
+          "label": "نمط العرض",
+          "translatable": false,
+          "options": [
+            { "value": "classic", "label": "كلاسيكي (صورة كاملة)" },
+            { "value": "split", "label": "منقسم (صورة ونص)" },
+            { "value": "minimal", "label": "بسيط (تركيز على النص)" }
+          ],
+          "default": "classic"
+        },
+        "autoplay": {
+          "type": "select",
+          "label": "تشغيل تلقائي",
+          "translatable": false,
+          "options": [
+            { "value": "true", "label": "نعم" },
+            { "value": "false", "label": "لا" }
+          ],
+          "default": "true"
+        },
+        "interval": {
+          "type": "number",
+          "label": "مدة العرض (بالثواني)",
+          "default": 5
+        },
+
+        "slides": {
+
+          "type": "repeater",
+          "label": "الشرائح",
+          "itemLabel": "شريحة",
+          "minItems": 1,
+          "maxItems": 10,
+          "fields": {
+            "image": { "type": "image", "label": "الصورة" },
+            "title": { "type": "text", "label": "العنوان الرئيسي", "default": "أناقة بلا حدود" },
+            "subtitle": { "type": "textarea", "label": "الوصف", "default": "اكتشف أحدث صيحات الموضة والمنتجات الحصرية لدينا." },
+            "buttonText": { "type": "text", "label": "نص الزر", "default": "تسوق الآن" },
+            "link": { "type": "link", "label": "رابط الزر", "default": "/shop" },
+            "alignment": {
+              "type": "select",
+              "label": "محاذاة النص",
+              "options": [
+                { "value": "left", "label": "يسار" },
+                { "value": "center", "label": "وسط" },
+                { "value": "right", "label": "يمين" }
+              ],
+              "default": "center"
+            },
+            "overlayOpacity": {
+              "type": "text",
+              "label": "شفافية التعتيم (0-1)",
+              "default": "0.3"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "categories",
+      "name": "الأقسام",
+      "component": "CATEGORIES",
+      "group": "template_group",
+      "contentSchema": {
+        "color_scheme": {
+          "type": "select",
+          "label": "مخطط الألوان",
+          "optionsFrom": "color_schemes",
+          "default": "scheme-light"
+        },
+        "title": {
+          "type": "text",
+          "label": "العنوان",
+          "default": "الأقسام"
+        },
+        "subtitle": {
+          "type": "text",
+          "label": "العنوان الفرعي",
+          "default": "استكشف الأقسام"
+        },
+        "layout_style": {
+          "type": "select",
+          "label": "نمط العرض",
+          "options": [
+            {
+              "value": "grid",
+              "label": "شبكة تقليدية"
+            },
+            {
+              "value": "circles",
+              "label": "دوائر ناعمة"
+            },
+            {
+              "value": "bento",
+              "label": "بينتو (Bento)"
+            }
+          ],
+          "default": "grid"
+        },
+        "padding_top": {
+          "type": "text",
+          "label": "الهامش العلوي",
+          "default": "80px"
+        },
+        "padding_bottom": {
+          "type": "text",
+          "label": "الهامش السفلي",
+          "default": "80px"
+        },
+        "enable_horizontal_scroll": {
+          "type": "select",
+          "label": "تفعيل سلايدر سحب أفقي",
+          "description": "يعمل مع شبكة تقليدية ودوائر ناعمة لتحويل العرض إلى تمرير أفقي بالسحب.",
+          "options": [
+            {
+              "value": "false",
+              "label": "إيقاف"
+            },
+            {
+              "value": "true",
+              "label": "تفعيل"
+            }
+          ],
+          "default": "false"
+        },
+        "category_scope": {
+          "type": "category_scope",
+          "label": "أقسام العرض",
+          "description": "اضغط للاختيار: كل الأقسام، أو التي تحتوي منتجات فقط، أو أقسام محددة من القائمة.",
+          "default": {
+            "mode": "all",
+            "categoryIds": []
+          }
+        }
+      }
+    },
+    {
+      "id": "featured_products",
+      "name": "منتجات مميزة",
+      "component": "FEATURED_PRODUCTS",
+      "group": "template_group",
+      "contentSchema": {
+        "color_scheme": {
+          "type": "select",
+          "label": "مخطط الألوان",
+          "optionsFrom": "color_schemes",
+          "default": "scheme-light"
+        },
+        "title": {
+          "type": "text",
+          "label": "العنوان",
+          "default": "قطع معمارية"
+        },
+        "subtitle": {
+          "type": "text",
+          "label": "العنوان الفرعي",
+          "default": "وصل حديثاً"
+        },
+        "layout_style": {
+          "type": "select",
+          "label": "نمط العرض",
+          "options": [
+            {
+              "value": "grid",
+              "label": "شبكة (Grid)"
+            },
+            {
+              "value": "minimal_list",
+              "label": "قائمة فاخرة (Minimal)"
+            }
+          ],
+          "default": "grid"
+        },
+        "items_per_row": {
+          "type": "select",
+          "label": "عدد العناصر في الصف (للشبكة)",
+          "options": [
+            {
+              "value": "2",
+              "label": "2"
+            },
+            {
+              "value": "3",
+              "label": "3"
+            },
+            {
+              "value": "4",
+              "label": "4"
+            }
+          ],
+          "default": "4"
+        },
+        "padding_top": {
+          "type": "text",
+          "label": "الهامش العلوي",
+          "default": "100px"
+        },
+        "padding_bottom": {
+          "type": "text",
+          "label": "الهامش السفلي",
+          "default": "100px"
+        },
+        "category_scope": {
+          "type": "category_scope",
+          "label": "نطاق الأقسام",
+          "description": "ما المنتجات التي تُعرض: كل الأقسام، أو أقسام بها منتجات فقط، أو أقسام تختارها من القائمة.",
+          "default": {
+            "mode": "all",
+            "categoryIds": []
+          }
+        },
+        "show_category_tabs": {
+          "type": "select",
+          "label": "تبويب تصفية بالقسم (في الواجهة)",
+          "description": "يظهر «الكل» وأقسام من المنتجات المعروضة لتصفية سريعة. يُنصح بإخفائه إن لم ترد التبويبات.",
+          "options": [
+            {
+              "value": "true",
+              "label": "إظهار عند وجود أكثر من قسم"
+            },
+            {
+              "value": "false",
+              "label": "إخفاء"
+            }
+          ],
+          "default": "false"
+        }
+      }
+    },
+    {
+      "id": "product_carousel",
+      "name": "سلايدر منتجات",
+      "component": "PRODUCT_CAROUSEL",
+      "group": "template_group",
+      "contentSchema": {
+        "color_scheme": {
+          "type": "select",
+          "label": "مخطط الألوان",
+          "optionsFrom": "color_schemes",
+          "default": "scheme-light"
+        },
+        "title": {
+          "type": "text",
+          "label": "العنوان",
+          "default": "منتجات مختارة"
+        },
+        "subtitle": {
+          "type": "text",
+          "label": "العنوان الفرعي",
+          "default": "مختاراتنا لك"
+        },
+        "padding_top": {
+          "type": "text",
+          "label": "الهامش العلوي",
+          "default": "100px"
+        },
+        "padding_bottom": {
+          "type": "text",
+          "label": "الهامش السفلي",
+          "default": "100px"
+        },
+        "category_scope": {
+          "type": "category_scope",
+          "label": "نطاق الأقسام",
+          "default": {
+            "mode": "all",
+            "categoryIds": []
+          }
+        }
+      }
+    },
+    {
+      "id": "newsletter",
+      "name": "النشرة البريدية",
+      "component": "NEWSLETTER",
+      "group": "template_group",
+      "contentSchema": {
+        "color_scheme": {
+          "type": "select",
+          "label": "مخطط الألوان",
+          "optionsFrom": "color_schemes",
+          "default": "scheme-light"
+        },
+        "title": {
+          "type": "text",
+          "label": "العنوان",
+          "default": "ابقَ على اطلاع"
+        },
+        "subtitle": {
+          "type": "text",
+          "label": "العنوان الفرعي"
+        },
+        "padding_top": {
+          "type": "text",
+          "label": "الهامش العلوي",
+          "default": "100px"
+        },
+        "padding_bottom": {
+          "type": "text",
+          "label": "الهامش السفلي",
+          "default": "100px"
+        }
+      }
+    },
+    {
+      "id": "product_details",
+      "name": "إعدادات صفحة المنتج (متقدم)",
+      "component": "PRODUCT_DETAILS_SETTINGS",
+      "group": "template_group",
+      "contentSchema": {
+
+        "color_scheme": {
+          "type": "select",
+          "label": "مخطط الألوان",
+          "optionsFrom": "color_schemes",
+          "default": "scheme-light"
+        },
+        "layout": {
+          "type": "select",
+          "label": "تخطيط الصفحة",
+          "options": [
+            {
+              "value": "image_left",
+              "label": "صورة يسار / تفاصيل يمين"
+            },
+            {
+              "value": "image_right",
+              "label": "صورة يمين / تفاصيل يسار"
+            },
+            {
+              "value": "image_top",
+              "label": "صورة في الأعلى / تفاصيل أسفل"
+            }
+          ],
+          "default": "image_left"
+        },
+        "show_thumbnails": {
+          "type": "select",
+          "label": "إظهار صور مصغّرة",
+          "options": [
+            {
+              "value": "true",
+              "label": "نعم"
+            },
+            {
+              "value": "false",
+              "label": "لا"
+            }
+          ],
+          "default": "true"
+        },
+        "show_description": {
+          "type": "select",
+          "label": "إظهار وصف المنتج",
+          "options": [
+            {
+              "value": "true",
+              "label": "نعم"
+            },
+            {
+              "value": "false",
+              "label": "لا"
+            }
+          ],
+          "default": "true"
+        },
+        "show_quantity": {
+          "type": "select",
+          "label": "إظهار حقل الكمية",
+          "options": [
+            {
+              "value": "true",
+              "label": "نعم"
+            },
+            {
+              "value": "false",
+              "label": "لا"
+            }
+          ],
+          "default": "true"
+        },
+        "show_add_to_cart": {
+          "type": "select",
+          "label": "إظهار زر أضف إلى السلة",
+          "options": [
+            { "value": "true", "label": "نعم" },
+            { "value": "false", "label": "لا" }
+          ],
+          "default": "true"
+        },
+        "show_wishlist": {
+          "type": "select",
+          "label": "إظهار زر المفضلة",
+          "options": [
+            { "value": "true", "label": "نعم" },
+            { "value": "false", "label": "لا" }
+          ],
+          "default": "true"
+        },
+        "show_share": {
+          "type": "select",
+          "label": "إظهار زر المشاركة",
+          "options": [
+            { "value": "true", "label": "نعم" },
+            { "value": "false", "label": "لا" }
+          ],
+          "default": "true"
+        },
+        "trust_badges": {
+          "type": "repeater",
+          "label": "مميزات المنتج (Badges)",
+          "itemLabel": "ميزة",
+          "fields": {
+            "icon": { "type": "text", "label": "اسم الأيقونة (من Lucide)", "default": "CheckCircle" },
+            "title": { "type": "text", "label": "العنوان الرئيسي" },
+            "subtitle": { "type": "text", "label": "العنوان الفرعي" }
+          },
+          "default": []
+        },
+
+        "related_products_title": {
+          "type": "text",
+          "label": "عنوان المنتجات ذات الصلة",
+          "default": "قد يعجبك أيضاً"
+        },
+        "show_recently_viewed": {
+          "type": "select",
+          "label": "إظهار المنتجات التي شوهدت مؤخراً",
+          "options": [
+            { "value": "true", "label": "نعم" },
+            { "value": "false", "label": "لا" }
+          ],
+          "default": "true"
+        },
+        "recently_viewed_title": {
+          "type": "text",
+          "label": "عنوان شوهد مؤخراً",
+          "default": "شوهد مؤخراً"
+        }
+      },
+
+      "defaultContent": {
+        "layout": "image_left",
+        "show_thumbnails": "true",
+        "show_description": "true",
+        "show_quantity": "true",
+        "show_add_to_cart": "true",
+        "show_wishlist": "true",
+        "show_share": "true",
+        "related_products_title": "قد يعجبك أيضاً",
+        "show_recently_viewed": "true",
+        "recently_viewed_title": "شوهد مؤخراً",
+        "trust_badges": []
+      }
+
+
+    },
+    {
+      "id": "empty_state",
+      "name": "حالة فارغة",
+      "component": "EMPTY_STATE",
+      "group": "template_group",
+      "contentSchema": {
+        "color_scheme": {
+          "type": "select",
+          "label": "مخطط الألوان",
+          "optionsFrom": "color_schemes",
+          "default": "scheme-light"
+        },
+        "title": {
+          "type": "text",
+          "label": "العنوان",
+          "default": "لا توجد نتائج"
+        },
+        "desc": {
+          "type": "textarea",
+          "label": "الوصف"
+        }
+      }
+    },
+    {
+      "id": "shop_page",
+      "name": "صفحة المتجر (نظام)",
+      "component": "SHOP_PAGE",
+      "group": "template_group",
+      "contentSchema": {
+        "color_scheme": {
+          "type": "select",
+          "label": "مخطط الألوان",
+          "optionsFrom": "color_schemes",
+          "default": "scheme-light"
+        },
+        "kicker": {
+          "type": "text",
+          "label": "تسمية صغيرة فوق العنوان",
+          "default": "المجموعة"
+        },
+        "title": {
+          "type": "text",
+          "label": "العنوان الرئيسي",
+          "default": "تسوق الكل"
+        },
+        "subtitle": {
+          "type": "textarea",
+          "label": "الوصف تحت العنوان",
+          "default": "استكشف مجموعتنا المختارة من الأثاث المعماري والديكور البسيط المصمم للمعيشة الحديثة."
+        },
+        "items_per_row": {
+          "type": "select",
+          "label": "أعمدة الشبكة",
+          "options": [
+            {
+              "value": "2",
+              "label": "2"
+            },
+            {
+              "value": "3",
+              "label": "3"
+            },
+            {
+              "value": "4",
+              "label": "4"
+            }
+          ],
+          "default": "4"
+        },
+        "show_advanced_toolbar": {
+          "type": "select",
+          "label": "شريط فلاتر وترتيب وعرض المزيد (مثل وضع المتقدم)",
+          "options": [
+            {
+              "value": "true",
+              "label": "نعم"
+            },
+            {
+              "value": "false",
+              "label": "لا"
+            }
+          ],
+          "default": "false"
+        },
+        "show_newsletter": {
+          "type": "select",
+          "label": "إظهار كتلة النشرة أسفل الصفحة",
+          "options": [
+            {
+              "value": "true",
+              "label": "نعم"
+            },
+            {
+              "value": "false",
+              "label": "لا"
+            }
+          ],
+          "default": "false"
+        },
+        "newsletter_title": {
+          "type": "text",
+          "label": "عنوان النشرة",
+          "default": "احصل على إلهام التصميم في بريدك"
+        },
+        "newsletter_subtitle": {
+          "type": "textarea",
+          "label": "وصف النشرة",
+          "default": "انضم إلى مجتمعنا واحصل على وصول حصري للمجموعات الجديدة، ونصائح التصميم الداخلي، والعروض الخاصة."
+        },
+        "show_category_nav": {
+          "type": "select",
+          "label": "شريط التنقل السريع (الأقسام)",
+          "options": [
+            { "value": "true", "label": "إظهار" },
+            { "value": "false", "label": "إخفاء بالكامل" }
+          ],
+          "default": "true"
+        },
+        "category_nav_scope": {
+          "type": "category_scope",
+          "label": "تخصيص أقسام التنقل السريع",
+          "description": "اختر الأقسام التي تود ظهورها في الشريط العلوي للتنقل السريع.",
+          "default": {
+            "mode": "all",
+            "categoryIds": []
+          }
+        },
+        "category_nav_mobile_layout": {
+
+          "type": "select",
+          "label": "طريقة العرض على الجوال",
+          "options": [
+            { "value": "scroll", "label": "تمرير أفقي (Slider)" },
+            { "value": "wrap", "label": "متعدد الأسطر (Wrap)" }
+          ],
+          "default": "scroll"
+        }
+      }
+    },
+    {
+      "id": "about_page",
+      "name": "صفحة من نحن (نظام)",
+      "component": "ABOUT_PAGE",
+      "group": "template_group",
+      "contentSchema": {
+        "color_scheme": {
+          "type": "select",
+          "label": "مخطط الألوان",
+          "optionsFrom": "color_schemes",
+          "default": "scheme-light"
+        },
+        "kicker": {
+          "type": "text",
+          "label": "تسمية صغيرة",
+          "default": "من نحن"
+        },
+        "title": {
+          "type": "text",
+          "label": "العنوان",
+          "default": "قصتنا"
+        },
+        "subtitle": {
+          "type": "textarea",
+          "label": "الوصف",
+          "default": "نحن نؤمن بتجربة تسوق بسيطة وواضحة، مع منتجات مختارة بعناية ودعم يضعك أولاً."
+        },
+        "image": {
+          "type": "image",
+          "label": "صورة تعبيرية"
+        },
+        "content_p1": {
+          "type": "textarea",
+          "label": "الفقرة الأولى",
+          "default": "تأسس متجرنا بهدف جعل التسوق الإلكتروني أسهل: عرض واضح للمنتجات، أسعار شفافة، وتوصيل موثوق."
+        },
+        "content_p2": {
+          "type": "textarea",
+          "label": "الفقرة الثانية",
+          "default": "فريقنا يعمل على اختيار المنتجات والاستماع لملاحظاتكم باستمرار. شكراً لكونكم جزءاً من رحلتنا."
+        },
+        "show_stats": {
+          "type": "select",
+          "label": "إظهار الأرقام/الإحصائيات",
+          "options": [
+            { "value": "true", "label": "نعم" },
+            { "value": "false", "label": "لا" }
+          ],
+          "default": "true"
+        },
+        "stats": {
+          "type": "repeater",
+          "label": "الإحصائيات",
+          "itemLabel": "إحصائية",
+          "fields": {
+            "value": { "type": "text", "label": "القيمة (مثلاً +10k)" },
+            "label": { "type": "text", "label": "التسمية (مثلاً عملاء)" }
+          },
+          "default": [
+            { "value": "10k+", "label": "عملاء سعداء" },
+            { "value": "500+", "label": "منتجات مميزة" },
+            { "value": "24/7", "label": "دعم فني" }
+          ]
+        }
+      }
+
+    },
+    {
+      "id": "contact_page",
+      "name": "صفحة اتصل بنا (نظام)",
+      "component": "CONTACT_PAGE",
+      "group": "template_group",
+      "contentSchema": {
+        "color_scheme": {
+          "type": "select",
+          "label": "مخطط الألوان",
+          "optionsFrom": "color_schemes",
+          "default": "scheme-light"
+        },
+        "kicker": {
+          "type": "text",
+          "label": "تسمية صغيرة",
+          "default": "اتصل بنا"
+        },
+        "title": {
+          "type": "text",
+          "label": "العنوان",
+          "default": "تواصل معنا"
+        },
+        "subtitle": {
+          "type": "textarea",
+          "label": "الوصف",
+          "default": "هل لديك سؤال أو ترغب في التواصل؟ يسعدنا مساعدتك. املأ النموذج أو تواصل عبر البريد أو الهاتف."
+        },
+        "show_email": { "type": "select", "label": "إظهار البريد", "options": [{ "value": "true", "label": "نعم" }, { "value": "false", "label": "لا" }], "default": "true" },
+        "show_phone": { "type": "select", "label": "إظهار الهاتف", "options": [{ "value": "true", "label": "نعم" }, { "value": "false", "label": "لا" }], "default": "true" },
+        "show_address": { "type": "select", "label": "إظهار العنوان", "options": [{ "value": "true", "label": "نعم" }, { "value": "false", "label": "لا" }], "default": "true" },
+        "custom_email": { "type": "text", "label": "بريد مخصص (اتركه فارغاً لاستخدام إعدادات المتجر)" },
+        "custom_phone": { "type": "text", "label": "هاتف مخصص" },
+        "custom_address": { "type": "textarea", "label": "عنوان مخصص" },
+        "submit_button_text": { "type": "text", "label": "نص زر الإرسال", "default": "إرسال الرسالة" }
+      }
+
+    },
+    {
+      "id": "wishlist_page",
+      "name": "صفحة المفضلة (نظام)",
+      "component": "WISHLIST_PAGE",
+      "group": "template_group",
+      "contentSchema": {
+        "color_scheme": {
+          "type": "select",
+          "label": "مخطط الألوان",
+          "optionsFrom": "color_schemes",
+          "default": "scheme-light"
+        }
+      }
+    },
+    {
+      "id": "track_order_page",
+      "name": "تتبع الطلب (نظام)",
+      "component": "TRACK_ORDER_PAGE",
+      "group": "template_group",
+      "contentSchema": {
+        "color_scheme": {
+          "type": "select",
+          "label": "مخطط الألوان",
+          "optionsFrom": "color_schemes",
+          "default": "scheme-light"
+        },
+        "title": {
+          "type": "text",
+          "label": "العنوان",
+          "default": "تتبع الطلب"
+        },
+        "subtitle": {
+          "type": "textarea",
+          "label": "الوصف"
+        }
+      }
+    },
+    {
+      "id": "profile_page",
+      "name": "الملف الشخصي (نظام)",
+      "component": "PROFILE_PAGE",
+      "group": "template_group",
+      "contentSchema": {
+        "color_scheme": {
+          "type": "select",
+          "label": "مخطط الألوان",
+          "optionsFrom": "color_schemes",
+          "default": "scheme-light"
+        },
+        "title": {
+          "type": "text",
+          "label": "العنوان",
+          "default": "حسابي"
+        },
+        "subtitle": {
+          "type": "textarea",
+          "label": "الوصف"
+        }
+      }
+    },
+    {
+      "id": "policy_page",
+      "name": "صفحة سياسة (نظام)",
+      "component": "POLICY_PAGE",
+      "group": "template_group",
+      "contentSchema": {
+        "color_scheme": {
+          "type": "select",
+          "label": "مخطط الألوان",
+          "optionsFrom": "color_schemes",
+          "default": "scheme-light"
+        },
+        "policy_slug": {
+          "type": "text",
+          "label": "مفتاح السياسة (اختياري، يُستخرج من المسار تلقائياً)"
+        }
+      }
+    },
+    {
+      "id": "product_reviews",
+      "name": "تقييمات المنتج",
+      "component": "PRODUCT_REVIEWS",
+      "group": "template_group",
+      "allowedPages": [
+        "product"
+      ],
+      "contentSchema": {
+        "color_scheme": {
+          "type": "select",
+          "label": "مخطط الألوان",
+          "optionsFrom": "color_schemes",
+          "default": "scheme-light"
+        },
+        "title": {
+          "type": "text",
+          "label": "العنوان",
+          "default": "آراء العملاء"
+        }
+      }
+    },
+    {
+      "id": "footer",
+      "name": "الفوتر",
+      "component": "FOOTER",
+      "group": "footer_group",
+      "contentSchema": {
+        "color_scheme": {
+          "type": "select",
+          "label": "مخطط الألوان",
+          "optionsFrom": "color_schemes",
+          "default": "scheme-light"
+        },
+        "store_description": {
+          "type": "textarea",
+          "label": "وصف المتجر",
+          "default": "نحن نقدم أفضل المنتجات المعمارية والديكور البسيط المصمم للمعيشة الحديثة. جودة لا تضاهى وتصميمات خالدة."
+        },
+
+        "footer_menu_title": {
+          "type": "text",
+          "label": "عنوان القائمة",
+          "default": "المتجر"
+        },
+        "footer_menu": {
+          "type": "menu",
+          "label": "اختر القائمة"
+        },
+
+        "support_menu_title": {
+          "type": "text",
+          "label": "عنوان عمود التواصل",
+          "default": "تواصل معنا"
+        },
+        "support_menu": {
+          "type": "menu",
+          "label": "اختر قائمة التواصل"
+        },
+
+        "show_social": {
+          "type": "select",
+          "label": "إظهار التواصل الاجتماعي",
+          "options": [
+            {
+              "value": "true",
+              "label": "نعم"
+            },
+            {
+              "value": "false",
+              "label": "لا"
+            }
+          ],
+          "default": "true"
+        },
+        "show_newsletter": {
+          "type": "select",
+          "label": "إظهار النشرة البريدية",
+          "options": [
+            {
+              "value": "true",
+              "label": "نعم"
+            },
+            {
+              "value": "false",
+              "label": "لا"
+            }
+          ],
+          "default": "true"
+        },
+        "newsletter_title": {
+          "type": "text",
+          "label": "عنوان النشرة",
+          "default": "النشرة البريدية"
+        },
+        "newsletter_desc": {
+          "type": "textarea",
+          "label": "وصف النشرة",
+          "default": "اشترك للحصول على تحديثات حصرية ومجموعات جديدة."
+        },
+        "legal_menu": {
+          "type": "menu",
+          "label": "قائمة الشروط والسياسات (تظهر في الأسفل)"
+        },
+        "copyright_text": {
+          "type": "text",
+          "label": "نص الحقوق أسفل الفوتر (اختياري)"
+        }
+
+      }
+    },
+    {
+      "id": "floating_promo",
+      "name": "شريط ترويجي عائم",
+      "component": "FLOATING_PROMO",
+      "group": "overlay_group",
+      "contentSchema": {
+        "color_scheme": {
+          "type": "select",
+          "label": "مخطط الألوان",
+          "optionsFrom": "color_schemes",
+          "default": "scheme-light"
+        },
+        "title": { "type": "text", "label": "العنوان", "default": "عرض خاص لفترة محدودة! 🔥" },
+        "text": { "type": "textarea", "label": "النص", "default": "احصل على خصم 20% على جميع المنتجات المعمارية عند استخدام كود: ARCH20" },
+        "button_text": { "type": "text", "label": "نص الزر", "default": "تسوق الآن" },
+        "link": { "type": "link", "label": "الرابط", "default": "/shop" }
+      }
+    },
+    {
+      "id": "promo_popup",
+      "name": "نافذة ترويجية منوعة (خصم/منتج)",
+      "component": "PROMO_POPUP",
+      "group": "overlay_group",
+      "contentSchema": {
+        "color_scheme": {
+          "type": "select",
+          "label": "مخطط الألوان",
+          "optionsFrom": "color_schemes",
+          "default": "scheme-light"
+        },
+        "layout_style": {
+          "type": "select",
+          "label": "نمط التصميم",
+          "options": [
+            { "value": "centered", "label": "مركزي بسيط" },
+            { "value": "side_image", "label": "صورة جانبية" },
+            { "value": "minimal", "label": "بسيط جداً" }
+          ],
+          "default": "centered"
+        },
+        "type": {
+          "type": "select",
+          "label": "نوع النافذة",
+          "options": [
+            { "value": "discount", "label": "كوبون خصم" },
+            { "value": "announcement", "label": "إعلان عام" }
+          ],
+          "default": "discount"
+        },
+        "title": { "type": "text", "label": "العنوان", "default": "خصم حصري لك!" },
+        "subtitle": { "type": "textarea", "label": "الوصف", "default": "استخدم الكود أدناه للحصول على خصم إضافي." },
+        "image": { "type": "image", "label": "الصورة" },
+        "badge": { "type": "text", "label": "شارة (مثلاً: جديد، خصم 50%)", "default": "" },
+        "code": { "type": "text", "label": "كود الخصم (إذا كان كوبون)", "default": "SAVE25" },
+        "button_text": { "type": "text", "label": "نص الزر", "default": "اطلب الآن" },
+        "link": { "type": "link", "label": "الرابط", "default": "/shop" },
+        "secondary_link": { "type": "link", "label": "رابط إضافي (اختياري)", "default": "" },
+        "secondary_link_text": { "type": "text", "label": "نص الرابط الإضافي", "default": "معرفة المزيد" },
+        "delay": { "type": "number", "label": "تأخير الظهور (ثواني)", "default": 3 }
+      }
+    },
+    {
+      "id": "newsletter_popup",
+      "name": "نافذة النشرة البريدية المنبثقة",
+      "component": "NEWSLETTER_POPUP",
+      "group": "overlay_group",
+      "contentSchema": {
+        "color_scheme": {
+          "type": "select",
+          "label": "مخطط الألوان",
+          "optionsFrom": "color_schemes",
+          "default": "scheme-light"
+        },
+        "layout_style": {
+          "type": "select",
+          "label": "نمط التصميم",
+          "options": [
+            { "value": "split", "label": "منقسم (صورة ونص)" },
+            { "value": "minimal", "label": "مركزي (بدون صورة)" },
+            { "value": "full_bg", "label": "خلفية كاملة" }
+          ],
+          "default": "split"
+        },
+        "title": { "type": "text", "label": "العنوان", "default": "انضم إلى قائمتنا البريدية" },
+        "subtitle": { "type": "textarea", "label": "الوصف", "default": "احصل على آخر التحديثات والعروض الحصرية مباشرة في بريدك." },
+        "image": { "type": "image", "label": "الصورة" },
+        "label": { "type": "text", "label": "تسمية علوية", "default": "انضم إلى عالمنا" },
+        "buttonText": { "type": "text", "label": "نص الزر", "default": "اشترك الآن" },
+        "link": { "type": "link", "label": "الرابط بعد الاشتراك", "default": "/" },
+        "delay": { "type": "number", "label": "تأخير الظهور (ثواني)", "default": 3 }
+      }
+    }
+  ],
+  "pages": [
+    {
+      "id": "home",
+      "type": "home",
+      "path": "/",
+      "layout": [
+        {
+          "sectionId": "header",
+          "handle": "header",
+          "defaultEnabled": true
+        },
+        {
+          "sectionId": "hero_slider",
+          "handle": "hero_slider",
+          "defaultEnabled": true
+        },
+        {
+          "sectionId": "categories",
+          "handle": "categories",
+          "defaultEnabled": true
+        },
+        {
+          "sectionId": "featured_products",
+          "handle": "featured_products",
+          "defaultEnabled": true
+        },
+        {
+          "sectionId": "newsletter",
+          "handle": "newsletter",
+          "defaultEnabled": true
+        },
+        {
+          "sectionId": "floating_promo",
+          "handle": "floating_promo",
+          "defaultEnabled": true
+        },
+        {
+          "sectionId": "promo_popup",
+          "handle": "promo_popup",
+          "defaultEnabled": true
+        },
+        {
+          "sectionId": "newsletter_popup",
+          "handle": "newsletter_popup",
+          "defaultEnabled": true
+        },
+        {
+          "sectionId": "footer",
+          "handle": "footer",
+          "defaultEnabled": true
+        }
+      ]
+    },
+    {
+      "id": "shop",
+      "type": "collection",
+      "path": "/shop",
+      "layout": [
+        {
+          "sectionId": "header",
+          "handle": "header",
+          "defaultEnabled": true
+        },
+        {
+          "sectionId": "shop_page",
+          "handle": "shop_page",
+          "defaultEnabled": true
+        },
+        {
+          "sectionId": "footer",
+          "handle": "footer",
+          "defaultEnabled": true
+        }
+      ]
+    },
+    {
+      "id": "product",
+      "type": "product",
+      "path": "/product/:id",
+      "layout": [
+        {
+          "sectionId": "header",
+          "handle": "header",
+          "defaultEnabled": true
+        },
+        {
+          "sectionId": "product_details",
+          "handle": "product_details",
+          "defaultEnabled": true
+        },
+        {
+          "sectionId": "product_reviews",
+          "handle": "product_reviews",
+          "defaultEnabled": true
+        },
+        {
+          "sectionId": "featured_products",
+          "handle": "featured_products",
+          "defaultEnabled": true
+        },
+        {
+          "sectionId": "footer",
+          "handle": "footer",
+          "defaultEnabled": true
+        }
+      ]
+    },
+    {
+      "id": "about",
+      "type": "content",
+      "path": "/about",
+      "layout": [
+        {
+          "sectionId": "header",
+          "handle": "header",
+          "defaultEnabled": true
+        },
+        {
+          "sectionId": "about_page",
+          "handle": "about_page",
+          "defaultEnabled": true
+        },
+        {
+          "sectionId": "footer",
+          "handle": "footer",
+          "defaultEnabled": true
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "type": "content",
+      "path": "/contact",
+      "layout": [
+        {
+          "sectionId": "header",
+          "handle": "header",
+          "defaultEnabled": true
+        },
+        {
+          "sectionId": "contact_page",
+          "handle": "contact_page",
+          "defaultEnabled": true
+        },
+        {
+          "sectionId": "footer",
+          "handle": "footer",
+          "defaultEnabled": true
+        }
+      ]
+    },
+    {
+      "id": "wishlist",
+      "type": "content",
+      "path": "/wishlist",
+      "layout": [
+        {
+          "sectionId": "header",
+          "handle": "header",
+          "defaultEnabled": true
+        },
+        {
+          "sectionId": "wishlist_page",
+          "handle": "wishlist_page",
+          "defaultEnabled": true
+        },
+        {
+          "sectionId": "footer",
+          "handle": "footer",
+          "defaultEnabled": true
+        }
+      ]
+    },
+    {
+      "id": "track-order",
+      "type": "system",
+      "path": "/track-order",
+      "layout": [
+        {
+          "sectionId": "header",
+          "handle": "header",
+          "defaultEnabled": true
+        },
+        {
+          "sectionId": "track_order_page",
+          "handle": "track_order_page",
+          "defaultEnabled": true
+        },
+        {
+          "sectionId": "footer",
+          "handle": "footer",
+          "defaultEnabled": true
+        }
+      ]
+    },
+    {
+      "id": "profile",
+      "type": "system",
+      "path": "/profile",
+      "layout": [
+        {
+          "sectionId": "header",
+          "handle": "header",
+          "defaultEnabled": true
+        },
+        {
+          "sectionId": "profile_page",
+          "handle": "profile_page",
+          "defaultEnabled": true
+        },
+        {
+          "sectionId": "footer",
+          "handle": "footer",
+          "defaultEnabled": true
+        }
+      ]
+    },
+    {
+      "id": "policy",
+      "type": "policy",
+      "path": "/policy/:slug",
+      "layout": [
+        {
+          "sectionId": "header",
+          "handle": "header",
+          "defaultEnabled": true
+        },
+        {
+          "sectionId": "policy_page",
+          "handle": "policy_page",
+          "defaultEnabled": true
+        },
+        {
+          "sectionId": "footer",
+          "handle": "footer",
+          "defaultEnabled": true
+        }
+      ]
+    }
+  ]
+}
