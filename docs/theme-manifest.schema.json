@@ -1,0 +1,187 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Storify Theme Manifest",
+  "description": "theme-manifest.json at the root of the theme package (zip).",
+  "type": "object",
+  "required": ["name", "version", "entry", "sections"],
+  "additionalProperties": true,
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "manifestVersion": {
+      "type": "number",
+      "enum": [1],
+      "description": "Current manifest DSL version."
+    },
+    "entry": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Path to main bundle relative to theme root, e.g. assets/main.js"
+    },
+    "languages": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "assets": {
+      "type": "object",
+      "additionalProperties": { "type": ["string", "number", "boolean", "object", "array", "null"] }
+    },
+    "themeSettingsSchema": {
+      "type": "object",
+      "description": "Preferred theme-level settings schema.",
+      "additionalProperties": { "$ref": "#/definitions/fieldDefinition" }
+    },
+    "settingsSchema": {
+      "type": "object",
+      "description": "Legacy alias for theme-level settings schema.",
+      "additionalProperties": { "$ref": "#/definitions/fieldDefinition" }
+    },
+    "sections": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "items": { "$ref": "#/definitions/sectionDefinition" }
+    },
+    "pages": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/pageDefinition" }
+    },
+    "pageDefaults": {
+      "type": "object",
+      "description": "Per-page defaults keyed by page id, then by layout handle.",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    }
+  },
+  "definitions": {
+    "sectionDefinition": {
+      "type": "object",
+      "required": ["id", "name", "component"],
+      "additionalProperties": true,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "component": { "type": "string", "minLength": 1 },
+        "order": { "type": "number" },
+        "group": {
+          "type": "string",
+          "enum": ["header_group", "template_group", "overlay_group", "footer_group"]
+        },
+        "allowedPages": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "contentSchema": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/definitions/fieldDefinition" }
+        },
+        "defaultContent": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "pageDefinition": {
+      "type": "object",
+      "required": ["id", "type", "path", "layout"],
+      "additionalProperties": true,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "type": { "type": "string", "minLength": 1 },
+        "path": { "type": "string", "minLength": 1 },
+        "layout": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/layoutItemDefinition" }
+        }
+      }
+    },
+    "layoutItemDefinition": {
+      "type": "object",
+      "required": ["sectionId", "handle"],
+      "additionalProperties": true,
+      "properties": {
+        "sectionId": { "type": "string", "minLength": 1 },
+        "handle": { "type": "string", "minLength": 1 },
+        "defaultEnabled": { "type": "boolean" }
+      }
+    },
+    "fieldDefinition": {
+      "type": "object",
+      "required": ["type"],
+      "additionalProperties": true,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "text",
+            "textarea",
+            "richtext",
+            "number",
+            "select",
+            "multiselect",
+            "color",
+            "image",
+            "video",
+            "link",
+            "category",
+            "categories",
+            "product",
+            "products",
+            "menu",
+            "repeater",
+            "metafield_mapping"
+          ]
+        },
+        "label": { "type": "string" },
+        "description": { "type": "string" },
+        "required": { "type": "boolean" },
+        "localizable": { "type": "boolean" },
+        "default": {},
+        "min": { "type": "number" },
+        "max": { "type": "number" },
+        "maxLength": { "type": "number" },
+        "maxItems": { "type": "number" },
+        "minItems": { "type": "number" },
+        "itemLabel": { "type": "string" },
+        "aspectRatio": {
+          "type": "string",
+          "enum": ["square", "landscape", "portrait", "free"]
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              { "type": "string" },
+              {
+                "type": "object",
+                "required": ["value", "label"],
+                "properties": {
+                  "value": { "type": ["string", "number", "boolean"] },
+                  "label": { "type": "string" }
+                },
+                "additionalProperties": true
+              }
+            ]
+          }
+        },
+        "fields": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/definitions/fieldDefinition" }
+        }
+      }
+    }
+  }
+}

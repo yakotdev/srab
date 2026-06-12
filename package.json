@@ -1,7 +1,7 @@
 {
   "name": "@storify/theme-srab",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.2",
   "type": "module",
   "description": "Srab — official Storify storefront theme",
   "repository": {
@@ -16,11 +16,12 @@
     "dev": "storify theme dev",
     "sync": "storify theme sync --production --open-storefront",
     "sync:once": "storify theme sync --production --once",
+    "sync:new": "storify theme sync --production --new --once",
     "login:prod": "storify login --production",
     "build": "storify theme build",
     "preview": "vite preview",
-    "zip": "storify theme pack",
-    "storify": "storify theme pack",
+    "zip": "storify theme build && storify theme pack",
+    "storify": "storify theme build && storify theme pack",
     "clean": "rm -rf dist",
     "lint": "node ./node_modules/typescript/bin/tsc --noEmit",
     "validate-manifest": "storify theme validate"

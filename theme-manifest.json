@@ -1,6 +1,6 @@
 {
   "name": "Srab",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "manifestVersion": 1,
   "entry": "assets/main.js",
   "languages": [
@@ -1220,6 +1220,7 @@
       "name": "شريط ترويجي عائم",
       "component": "FLOATING_PROMO",
       "group": "overlay_group",
+      "allowedPages": ["home"],
       "contentSchema": {
         "color_scheme": {
           "type": "select",
@@ -1230,7 +1231,8 @@
         "title": { "type": "text", "label": "العنوان", "default": "عرض خاص لفترة محدودة! 🔥" },
         "text": { "type": "textarea", "label": "النص", "default": "احصل على خصم 20% على جميع المنتجات المعمارية عند استخدام كود: ARCH20" },
         "button_text": { "type": "text", "label": "نص الزر", "default": "تسوق الآن" },
-        "link": { "type": "link", "label": "الرابط", "default": "/shop" }
+        "link": { "type": "link", "label": "الرابط", "default": "/shop" },
+        "delay": { "type": "number", "label": "تأخير الظهور (ثواني)", "default": 3, "min": 0 }
       }
     },
     {
@@ -1238,6 +1240,7 @@
       "name": "نافذة ترويجية منوعة (خصم/منتج)",
       "component": "PROMO_POPUP",
       "group": "overlay_group",
+      "allowedPages": ["home"],
       "contentSchema": {
         "color_scheme": {
           "type": "select",
@@ -1281,6 +1284,7 @@
       "name": "نافذة النشرة البريدية المنبثقة",
       "component": "NEWSLETTER_POPUP",
       "group": "overlay_group",
+      "allowedPages": ["home"],
       "contentSchema": {
         "color_scheme": {
           "type": "select",
@@ -1342,17 +1346,17 @@
         {
           "sectionId": "floating_promo",
           "handle": "floating_promo",
-          "defaultEnabled": true
+          "defaultEnabled": false
         },
         {
           "sectionId": "promo_popup",
           "handle": "promo_popup",
-          "defaultEnabled": true
+          "defaultEnabled": false
         },
         {
           "sectionId": "newsletter_popup",
           "handle": "newsletter_popup",
-          "defaultEnabled": true
+          "defaultEnabled": false
         },
         {
           "sectionId": "footer",

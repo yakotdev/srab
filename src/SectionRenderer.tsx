@@ -60,6 +60,22 @@ const normalizeSectionToken = (value: unknown) =>
     .toUpperCase()
     .replace(/-/g, '_');
 
+/** Popups/floating promos: optional add-ons (template_group) but rendered as overlays when enabled. */
+const OPTIONAL_OVERLAY_TYPES = new Set(['FLOATING_PROMO', 'PROMO_POPUP', 'NEWSLETTER_POPUP']);
+
+const resolveSectionType = (section: LayoutSection) => {
+  const candidates = [
+    normalizeSectionToken(section.type),
+    normalizeSectionToken(section.id),
+  ].filter(Boolean);
+  return candidates.find((token) => SECTION_MAP[token]);
+};
+
+const isOverlaySection = (section: LayoutSection, resolvedType?: string) => {
+  const type = resolvedType || resolveSectionType(section);
+  return section.group === 'overlay_group' || (type ? OPTIONAL_OVERLAY_TYPES.has(type) : false);
+};
+
 export const SectionRenderer: React.FC = () => {
   const { layout, settings, activeSectionId } = useThemeConfig();
 
@@ -98,7 +114,7 @@ export const SectionRenderer: React.FC = () => {
     const schemeVars = buildSchemeCssVariables(scheme);
     const schemeStyle = { ...schemeVars, ...fontVars };
 
-    const isOverlay = section.group === 'overlay_group';
+    const isOverlay = isOverlaySection(section, resolvedType);
     const isEager = resolvedType === 'HEADER' || resolvedType === 'FOOTER';
 
     const inner = <Component section={{ ...section, type: resolvedType }} />;
@@ -119,13 +135,13 @@ export const SectionRenderer: React.FC = () => {
     );
   };
 
-  const mainLayout = sortedLayout.filter((s) => s.group !== 'overlay_group');
-  const overlayLayout = sortedLayout.filter((s) => s.group === 'overlay_group');
+  const mainLayout = sortedLayout.filter((s) => !isOverlaySection(s));
+  const overlayLayout = sortedLayout.filter((s) => isOverlaySection(s));
 
   return (
     <div className="flex flex-col min-h-screen">
-      {overlayLayout.map(renderSection)}
       {mainLayout.map(renderSection)}
+      {overlayLayout.map(renderSection)}
     </div>
   );
 };
