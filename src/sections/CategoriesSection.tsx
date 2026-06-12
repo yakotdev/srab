@@ -83,6 +83,10 @@ const CategoriesSection: React.FC<{ section: any }> = ({ section }) => {
   // Clone items to create infinite effect
   const items = categories.length > 0 ? [...categories, ...categories, ...categories] : [];
 
+  const [isDragging, setIsDragging] = React.useState(false);
+  const [lastX, setLastX] = React.useState(0);
+  const [dragMoved, setDragMoved] = React.useState(false);
+
   const handleScroll = () => {
     if (!containerRef.current || categories.length === 0) return;
     const { scrollLeft, scrollWidth } = containerRef.current;
@@ -105,6 +109,51 @@ const CategoriesSection: React.FC<{ section: any }> = ({ section }) => {
     }
   };
 
+  const onMouseDown = (e: React.MouseEvent) => {
+    if (!enableHorizontalScroll || !containerRef.current) return;
+    setIsDragging(true);
+    setDragMoved(false);
+    setLastX(e.pageX);
+  };
+
+  const onMouseLeave = () => {
+    setIsDragging(false);
+  };
+
+  const onMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const onMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !containerRef.current) return;
+    e.preventDefault();
+    const x = e.pageX;
+    const walk = (x - lastX) * 2;
+    if (Math.abs(walk) > 0) setDragMoved(true);
+    containerRef.current.scrollLeft -= walk;
+    setLastX(x);
+  };
+
+  React.useEffect(() => {
+    if (enableHorizontalScroll && containerRef.current && categories.length > 0) {
+      const scrollWidth = containerRef.current.scrollWidth;
+      const singleSetWidth = scrollWidth / 3;
+      // Initialize to middle set
+      containerRef.current.scrollLeft = isRtl ? -singleSetWidth : singleSetWidth;
+    }
+  }, [enableHorizontalScroll, categories.length]);
+
+  const categoryPath = (cat: any) => `/shop?category=${encodeURIComponent(cat.id || cat.name || '')}`;
+
+  const handleItemClick = (e: React.MouseEvent, cat: any) => {
+    // If user dragged, don't trigger click
+    if (dragMoved) {
+      e.preventDefault();
+      return;
+    }
+    navigateStorefront(categoryPath(cat));
+  };
+
   const scroll = (direction: 'next' | 'prev') => {
     if (!containerRef.current) return;
     const { clientWidth } = containerRef.current;
@@ -119,30 +168,20 @@ const CategoriesSection: React.FC<{ section: any }> = ({ section }) => {
     containerRef.current.scrollBy({ left: move, behavior: 'smooth' });
   };
 
-  React.useEffect(() => {
-    if (enableHorizontalScroll && containerRef.current && categories.length > 0) {
-      const scrollWidth = containerRef.current.scrollWidth;
-      const singleSetWidth = scrollWidth / 3;
-      // Initialize to middle set
-      containerRef.current.scrollLeft = isRtl ? -singleSetWidth : singleSetWidth;
-    }
-  }, [enableHorizontalScroll, categories.length]);
-
   const renderContent = () => {
-    const categoryPath = (cat: any) => `/shop?category=${encodeURIComponent(cat.id || cat.name || '')}`;
     switch (displayStyle) {
       case 'bento':
         return (
-          <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-6 h-[800px]">
+          <div className="grid grid-cols-2 md:grid-cols-4 grid-rows-4 md:grid-rows-2 gap-3 md:gap-6 h-[500px] md:h-[800px]">
             {categories.slice(0, 4).map((cat, i) => (
               <button
                 type="button"
-                onClick={() => navigateStorefront(categoryPath(cat))}
+                onClick={(e) => handleItemClick(e, cat)}
                 key={cat.id || cat.name || i}
                 className={`group relative overflow-hidden cursor-pointer block ${
-                  i === 0 ? 'md:col-span-2 md:row-span-2' : 
-                  i === 1 ? 'md:col-span-2 md:row-span-1' : 
-                  'md:col-span-1 md:row-span-1'
+                  i === 0 ? 'col-span-2 row-span-2 md:col-span-2 md:row-span-2' : 
+                  i === 1 ? 'col-span-2 row-span-1 md:col-span-2 md:row-span-1' : 
+                  'col-span-1 row-span-1 md:col-span-1 md:row-span-1'
                 }`}
                 style={{ borderRadius }}
               >
@@ -151,12 +190,12 @@ const CategoriesSection: React.FC<{ section: any }> = ({ section }) => {
                   `w-full h-full object-cover transition-transform duration-700 group-hover:scale-110`,
                   grayscale,
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-8 text-end">
-                  <h3 className="text-2xl font-extrabold text-white tracking-tighter uppercase">{cat.name}</h3>
-                  <p className="text-white/70 text-[10px] font-bold uppercase tracking-widest mt-1">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-4 md:p-8 text-start md:text-end">
+                  <h3 className="text-lg md:text-2xl font-extrabold text-white tracking-tighter uppercase">{cat.name}</h3>
+                  <p className="text-white/70 text-[9px] md:text-[10px] font-bold uppercase tracking-widest mt-1">
                     {cat.count != null ? `${cat.count} ${t('categories_units')}` : ''}
                   </p>
-                  <div className="h-1 w-0 group-hover:w-12 transition-all duration-500 mt-4 bg-[var(--storify-primary)]" />
+                  <div className="h-1 w-0 group-hover:w-12 transition-all duration-500 mt-2 md:mt-4 bg-[var(--storify-primary)]" />
                 </div>
               </button>
             ))}
@@ -168,21 +207,29 @@ const CategoriesSection: React.FC<{ section: any }> = ({ section }) => {
             <div
               ref={containerRef}
               onScroll={handleScroll}
+              onMouseDown={onMouseDown}
+              onMouseLeave={onMouseLeave}
+              onMouseUp={onMouseUp}
+              onMouseMove={onMouseMove}
               className={enableHorizontalScroll 
-                ? "flex gap-8 overflow-x-auto pb-6 snap-x snap-mandatory no-scrollbar cursor-grab active:cursor-grabbing" 
-                : "flex flex-wrap justify-center gap-6 md:gap-12"
+                ? `flex gap-4 sm:gap-6 md:gap-8 overflow-x-auto pb-6 no-scrollbar cursor-grab active:cursor-grabbing ${isDragging ? '' : 'snap-x snap-mandatory'}`
+                : "flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-12"
               }
             >
               {(enableHorizontalScroll ? items : categories).map((cat, i) => (
                 <button
                   type="button"
-                  onClick={() => navigateStorefront(categoryPath(cat))}
+                  onClick={(e) => handleItemClick(e, cat)}
                   key={`${cat.id || cat.name}-${i}`}
-                  className={`group flex flex-col items-center gap-6 transition-transform duration-300 hover:-translate-y-2 ${enableHorizontalScroll ? 'snap-center shrink-0' : ''}`}
+                  className={`group flex flex-col items-center gap-3 md:gap-6 transition-transform duration-300 hover:-translate-y-2 ${enableHorizontalScroll ? 'snap-center shrink-0' : ''}`}
                   style={{ width: enableHorizontalScroll ? 'auto' : undefined }}
                 >
-                  <div className="w-48 h-48 md:w-60 md:h-60 rounded-full overflow-hidden border-2 border-transparent transition-all duration-500 p-2 shadow-sm group-hover:shadow-xl" style={{ background: 'var(--storify-bg)', borderColor: 'var(--storify-border)', '--hover-border': 'var(--storify-primary)' } as any}>
-                    <div className="w-full h-full rounded-full overflow-hidden border-2 border-transparent group-hover:border-[var(--storify-primary)] transition-colors duration-500">
+                  <div 
+                    className="relative w-28 h-28 sm:w-40 sm:h-40 md:w-56 md:h-56 rounded-full p-1 md:p-2 transition-all duration-500 shadow-sm group-hover:shadow-xl flex items-center justify-center" 
+                    style={{ background: 'var(--storify-bg)', border: '1px solid var(--storify-border)' }}
+                  >
+                    <div className="absolute inset-[-4px] md:inset-[-6px] rounded-full border-2 border-transparent group-hover:border-[var(--storify-primary)] transition-all duration-500 scale-95 group-hover:scale-100 opacity-0 group-hover:opacity-100" />
+                    <div className="w-full h-full rounded-full overflow-hidden">
                       {renderCategoryImage(
                         cat,
                         `w-full h-full object-cover rounded-full transition-transform duration-700 group-hover:scale-110`,
@@ -191,10 +238,10 @@ const CategoriesSection: React.FC<{ section: any }> = ({ section }) => {
                     </div>
                   </div>
                   <div className="text-center">
-                    <h3 className="text-xl font-black uppercase tracking-tighter" style={{ color: 'var(--storify-headings)' }}>
+                    <h3 className="text-sm sm:text-base md:text-xl font-bold uppercase tracking-tight" style={{ color: 'var(--storify-headings)' }}>
                       {cat.name}
                     </h3>
-                    <p className="text-[10px] font-bold uppercase tracking-widest mt-1 opacity-60" style={{ color: 'var(--storify-text)' }}>
+                    <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest mt-1 opacity-60" style={{ color: 'var(--storify-text)' }}>
                       {cat.count != null ? `${cat.count} ${t('categories_units')}` : ''}
                     </p>
                   </div>
@@ -237,15 +284,19 @@ const CategoriesSection: React.FC<{ section: any }> = ({ section }) => {
             <div
               ref={containerRef}
               onScroll={handleScroll}
+              onMouseDown={onMouseDown}
+              onMouseLeave={onMouseLeave}
+              onMouseUp={onMouseUp}
+              onMouseMove={onMouseMove}
               className={enableHorizontalScroll 
-                ? "flex gap-6 overflow-x-auto pb-6 snap-x snap-mandatory no-scrollbar cursor-grab active:cursor-grabbing" 
+                ? `flex gap-6 overflow-x-auto pb-6 no-scrollbar cursor-grab active:cursor-grabbing ${isDragging ? '' : 'snap-x snap-mandatory'}`
                 : "grid grid-cols-2 md:grid-cols-4 gap-6"
               }
             >
               {(enableHorizontalScroll ? items : categories).map((cat, i) => (
                 <motion.button
                   type="button"
-                  onClick={() => navigateStorefront(categoryPath(cat))}
+                  onClick={(e) => handleItemClick(e, cat)}
                   key={`${cat.id || cat.name}-${i}`}
                   initial={{ opacity: 0, y: 12 }}
                   whileInView={{ opacity: 1, y: 0 }}
