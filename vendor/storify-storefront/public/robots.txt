@@ -1,0 +1,3 @@
+# Storify storefront shell — allow indexing of public pages; checkout may be noindex via meta in app.
+User-agent: *
+Allow: /

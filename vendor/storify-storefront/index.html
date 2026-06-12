@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+<html lang="en" class="light">
+  <head>
+    <meta name="cf-2fa-verify" content="disable-rocket-loader" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- القالب والإعدادات أول شيء: طلب bootstrap قبل أي مورد آخر -->
+    <script data-cfasync="false">
+      (function(){
+        var q = location.search || '';
+        // Canonicalize malformed query (?=storeId) to ?storeId=... so all app code reads the same format.
+        if (q && q.charAt(0) === '?') {
+          var f = q.slice(1).split('&')[0] || '';
+          if (f.indexOf('=') === 0 && f.length > 1) {
+            try {
+              var malformedStoreId = decodeURIComponent(f.slice(1)).trim();
+              if (malformedStoreId) {
+                var normalized = '?storeId=' + encodeURIComponent(malformedStoreId);
+                var rest = q.slice(1 + f.length);
+                if (rest) normalized += rest;
+                history.replaceState(null, '', location.pathname + normalized + (location.hash || ''));
+                q = normalized;
+              }
+            } catch(e) {}
+          }
+        }
+        var m = q.match(/[?&]store_id=([^&]+)/i) || q.match(/[?&]storeId=([^&]+)/i);
+        var id = (m && m[1]) ? decodeURIComponent(m[1]).trim() : '';
+        // Support malformed URL like ?=demo-dev-store by treating first unnamed value as store id.
+        if (!id && q && q.charAt(0) === '?') {
+          var first = q.slice(1).split('&')[0] || '';
+          if (first.indexOf('=') === 0 && first.length > 1) {
+            try { id = decodeURIComponent(first.slice(1)).trim(); } catch(e) {}
+          }
+        }
+        try { if (!id) { var s = localStorage.getItem('active_store_id'); if (s && s.trim()) id = s.trim(); } } catch(e) {}
+        // Unified API يتطلب X-Store-Id؛ بدون متجر يفشل الطلب (400) ويُفسد Lighthouse. على localhost نستخدم متجر الـ seed-demo.
+        var host = location.hostname || '';
+        if (!id && (host === 'localhost' || host === '127.0.0.1')) id = 'demo-dev-store';
+        window.__BOOTSTRAP_PRELOAD__ = true;
+        // Read locale from first URL path segment (e.g. /en/shop, /he, /ar-eg) so the
+        // injected bootstrap matches the user-requested language. Without this, the
+        // backend returns the default-language theme/lang config and translations
+        // never appear on first paint.
+        var lang = '';
+        try {
+          var seg = (location.pathname || '').split('/').filter(Boolean)[0] || '';
+          if (/^[a-z]{2}(-[a-z]{2})?$/i.test(seg)) lang = seg.toLowerCase();
+        } catch(e) {}
+        var qsParts = [];
+        if (id) qsParts.push('storeId=' + encodeURIComponent(id));
+        if (lang) qsParts.push('language=' + encodeURIComponent(lang));
+        var url = qsParts.length ? ('/api/bootstrap?' + qsParts.join('&')) : '/api/bootstrap';
+        var hdrs = {};
+        if (id) hdrs['X-Store-Id'] = id;
+        if (lang) hdrs['Accept-Language'] = lang;
+        function firstHeroImage(theme) {
+          if (!theme || typeof theme !== 'object') return '';
+          var layout = Array.isArray(theme.layout) ? theme.layout : [];
+          for (var i = 0; i < layout.length; i++) {
+            var sec = layout[i];
+            if (!sec || typeof sec !== 'object') continue;
+            var type = String(sec.type || '').toUpperCase();
+            if (type !== 'HERO' && type !== 'SLIDESHOW') continue;
+            var content = sec.content && typeof sec.content === 'object' ? sec.content : {};
+            if (typeof content.image === 'string' && content.image.trim()) return content.image.trim();
+            if (Array.isArray(content.slides) && content.slides.length > 0) {
+              var first = content.slides[0];
+              if (first && typeof first.image === 'string' && first.image.trim()) return first.image.trim();
+            }
+          }
+          return '';
+        }
+
+        function preloadLcpImage(url) {
+          if (!url) return;
+          try {
+            var existing = document.querySelector('link[data-storify-lcp="1"]');
+            if (existing) existing.parentNode.removeChild(existing);
+            var link = document.createElement('link');
+            link.rel = 'preload';
+            link.as = 'image';
+            link.href = url;
+            link.setAttribute('fetchpriority', 'high');
+            link.setAttribute('data-storify-lcp', '1');
+            document.head.appendChild(link);
+          } catch(e) {}
+        }
+
+        function isSameOriginAsset(assetUrl) {
+          if (!assetUrl) return false;
+          if (assetUrl.charAt(0) === '/' && assetUrl.charAt(1) !== '/') return true;
+          try {
+            return new URL(assetUrl, location.href).origin === location.origin;
+          } catch(e) { return false; }
+        }
+
+        function preloadThemeAsset(assetUrl, asStyle) {
+          if (!assetUrl || !isSameOriginAsset(assetUrl)) return;
+          try {
+            var link = document.createElement('link');
+            if (asStyle) {
+              link.rel = 'preload';
+              link.as = 'style';
+            } else {
+              link.rel = 'modulepreload';
+              link.crossOrigin = 'anonymous';
+            }
+            link.href = assetUrl;
+            link.setAttribute('data-storify-theme-preload', '1');
+            document.head.appendChild(link);
+          } catch(e) {}
+        }
+
+        function preloadThemeBundle(html) {
+          if (!html || typeof html !== 'string') return;
+          try {
+            var seen = {};
+            var re = /src="([^"]+\.js(?:\?[^"]*)?)"/gi;
+            var m;
+            while ((m = re.exec(html)) !== null) {
+              var assetUrl = m[1];
+              if (!assetUrl || seen[assetUrl]) continue;
+              seen[assetUrl] = true;
+              preloadThemeAsset(assetUrl, false);
+            }
+          } catch(e) {}
+        }
+
+        function applyBootstrapPayload(d) {
+          if (!d || !d.theme) return;
+          if (!window.__BOOTSTRAP__) window.__BOOTSTRAP__ = d;
+          var hero = firstHeroImage(d.theme || {});
+          if (hero) preloadLcpImage(hero);
+          if (d.themeHtml) preloadThemeBundle(d.themeHtml);
+        }
+
+        var bootstrapReadyCalled = false;
+        function onBootstrapReady() {
+          if (bootstrapReadyCalled) return;
+          bootstrapReadyCalled = true;
+          try {
+            var isLocalDev = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+            if ('serviceWorker' in navigator && !isLocalDev) {
+              navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(function(){});
+            }
+          } catch(e) {}
+          window.dispatchEvent(new CustomEvent('storify:bootstrap-ready'));
+        }
+
+        function loadBootstrap() {
+          if (window.__BOOTSTRAP__ && window.__BOOTSTRAP__.theme) {
+            applyBootstrapPayload(window.__BOOTSTRAP__);
+            onBootstrapReady();
+            return;
+          }
+          fetch(url, { headers: hdrs }).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
+            if (d) applyBootstrapPayload(d);
+            onBootstrapReady();
+          }).catch(function(){
+            onBootstrapReady();
+          });
+        }
+
+        // Wait one frame so server-injected __BOOTSTRAP__ (engine) is parsed before fetching again.
+        if (typeof requestAnimationFrame === 'function') {
+          requestAnimationFrame(loadBootstrap);
+        } else {
+          loadBootstrap();
+        }
+        window.setTimeout(onBootstrapReady, 2500);
+      })();
+    </script>
+    <link rel="preconnect" href="https://cdn.storify.it.com" crossorigin />
+    <link rel="dns-prefetch" href="https://cdn.storify.it.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Keep only primary storefront faces; uploaded themes load their own families when needed. -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript
+      ><link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+    /></noscript>
+    <style>
+      body {
+        background-color: #f8fafc; /* Slate-50 globally */
+        color: #0f172a; /* Slate-900 globally */
+      }
+      
+      /* Smooth refined scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent; 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #cbd5e1; 
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8; 
+      }
+      
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+    </style>
+</head>
+  <body class="bg-slate-50 text-slate-900 antialiased selection:bg-indigo-100 selection:text-indigo-700">
+    <div id="storify-storefront-root"></div>
+    <script type="module" src="/index.tsx" data-cfasync="false"></script>
+</body>
+</html>

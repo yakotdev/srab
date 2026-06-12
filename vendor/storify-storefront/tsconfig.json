@@ -1,0 +1,47 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false,
+    "module": "ESNext",
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "skipLibCheck": true,
+    "types": [
+      "node"
+    ],
+    "moduleResolution": "bundler",
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "allowJs": true,
+    "jsx": "react-jsx",
+    "paths": {
+      "@storify/theme": [
+        "./theme-package/index.ts"
+      ],
+      "@srab/constants": [
+        "../../themes/srab/src/constants.ts"
+      ],
+      "@srab/ThemeContext": [
+        "../../themes/srab/src/ThemeContext.tsx"
+      ],
+      "@/*": [
+        "./*"
+      ],
+      "@features/*": [
+        "./features/*"
+      ],
+      "@lib/*": [
+        "./lib/*"
+      ],
+      "@apps/*": [
+        "../../../apps/*"
+      ]
+    },
+    "allowImportingTsExtensions": true,
+    "noEmit": true
+  }
+}

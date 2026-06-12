@@ -1,0 +1,48 @@
+{
+  "name": "@storify/theme-srab",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Srab — official Storify storefront theme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yakotdev/srab.git"
+  },
+  "homepage": "https://github.com/yakotdev/srab",
+  "bugs": {
+    "url": "https://github.com/yakotdev/srab/issues"
+  },
+  "scripts": {
+    "dev": "storify theme dev",
+    "sync": "storify theme sync --production --open-storefront",
+    "sync:once": "storify theme sync --production --once",
+    "login:prod": "storify login --production",
+    "build": "storify theme build",
+    "preview": "vite preview",
+    "zip": "storify theme pack",
+    "storify": "storify theme pack",
+    "clean": "rm -rf dist",
+    "lint": "node ./node_modules/typescript/bin/tsc --noEmit",
+    "validate-manifest": "storify theme validate"
+  },
+  "dependencies": {
+    "@tailwindcss/oxide-linux-x64-gnu": "^4.2.1",
+    "@tailwindcss/vite": "^4.1.14",
+    "@vitejs/plugin-react": "^5.0.4",
+    "clsx": "^2.1.1",
+    "dompurify": "^3.3.3",
+    "lucide-react": "^0.546.0",
+    "motion": "^12.23.24",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwind-merge": "^3.5.0",
+    "vite": "^6.2.0"
+  },
+  "devDependencies": {
+    "@storifycli/cli": "^0.5.0",
+    "@types/node": "^22.14.0",
+    "autoprefixer": "^10.4.21",
+    "tailwindcss": "^4.1.14",
+    "typescript": "~5.8.2"
+  }
+}

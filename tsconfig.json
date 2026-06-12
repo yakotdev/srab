@@ -1,0 +1,46 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "target": "ES2022",
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false,
+    "module": "ESNext",
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "allowJs": true,
+    "jsx": "react-jsx",
+    "paths": {
+      "@/*": [
+        "./*"
+      ],
+      "@storify/storefront-sdk": [
+        "./vendor/storify-storefront/lib/sdk/theme-iframe-helpers.ts"
+      ],
+      "@storify/bridge": [
+        "./vendor/storify-storefront/src/bridge/storify-injector.ts"
+      ],
+      "@storify/bridge-types": [
+        "./vendor/storify-storefront/src/bridge/types.ts"
+      ],
+      "@storify/theme": [
+        "./vendor/storify-storefront/theme-package/index.ts"
+      ],
+      "@srab/constants": [
+        "./src/constants.ts"
+      ],
+      "@srab/ThemeContext": [
+        "./src/ThemeContext.tsx"
+      ]
+    },
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "noEmit": true
+  }
+}

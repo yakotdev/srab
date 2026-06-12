@@ -1,0 +1,8 @@
+/*
+ * إخفاء أزرار تطوير الثيم العائمة (محرّر / محاكي) عند الحقن من الستورفرونت — دون تعديل كل قالب.
+ * التفعيل: ?storifyThemeDev=1 أو localStorage storify_theme_dev=1 أو VITE_SHOW_THEME_DEV_IN_STOREFRONT=true
+ */
+[data-storify-storefront-theme-host]:not([data-storify-theme-dev-tools]) button[class*='shadow-2xl'][class*='left-6'][class*='bottom-6'],
+[data-storify-storefront-theme-host]:not([data-storify-theme-dev-tools]) button[class*='shadow-2xl'][class*='left-6'][class*='bottom-24'] {
+  display: none !important;
+}

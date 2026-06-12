@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Almarai:wght@300;400;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--brand-font, "Almarai"), "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", serif;
+  
+  --color-brand-primary: var(--brand-primary, #141414);
+  --color-brand-secondary: #F5F5F5;
+  --color-brand-accent: var(--brand-accent, #E2B13C);
+  
+  --radius-xl: var(--brand-radius, 1rem);
+  --radius-2xl: calc(var(--brand-radius, 1rem) * 1.5);
+}
+
+@layer base {
+  body {
+    @apply font-sans text-slate-900 bg-white selection:bg-indigo-100 selection:text-slate-900;
+    direction: rtl;
+  }
+  img {
+    -webkit-user-drag: none;
+    user-select: none;
+  }
+}
+
+.glass {
+  @apply bg-white/70 backdrop-blur-md border border-white/20;
+}
+
+.glass-dark {
+  @apply bg-black/40 backdrop-blur-lg border border-white/10;
+}
+
+/* Custom scrollbar for a cleaner look */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-neutral-200 rounded-full hover:bg-neutral-300 transition-colors;
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  /* Safelist / compile aspect ratios and object fits for product images */
+  .aspect-square { aspect-ratio: 1 / 1; }
+  .aspect-\[3\/4\] { aspect-ratio: 3 / 4; }
+  .aspect-video { aspect-ratio: 16 / 9; }
+  .aspect-\[4\/3\] { aspect-ratio: 4 / 3; }
+  .aspect-\[4\/5\] { aspect-ratio: 4 / 5; }
+  .object-contain { object-fit: contain; }
+  .object-cover { object-fit: cover; }
+}
