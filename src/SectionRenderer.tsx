@@ -12,6 +12,8 @@ import FooterSection from './sections/FooterSection';
 
 const HeroSliderSection = React.lazy(() => import('./sections/HeroSliderSection'));
 const FeaturedProductsSection = React.lazy(() => import('./sections/FeaturedProductsSection'));
+const ImageWithTextSection = React.lazy(() => import('./sections/ImageWithTextSection'));
+const MarqueeSection = React.lazy(() => import('./sections/MarqueeSection'));
 const CategoriesSection = React.lazy(() => import('./sections/CategoriesSection'));
 const NewsletterSection = React.lazy(() => import('./sections/NewsletterSection'));
 const EmptyStateSection = React.lazy(() => import('./sections/EmptyStateSection'));
@@ -35,6 +37,8 @@ const SECTION_MAP: Record<string, React.LazyExoticComponent<React.FC<{ section: 
   HERO_SLIDER: HeroSliderSection,
   SLIDESHOW: SlideshowSection,
   FEATURED_PRODUCTS: FeaturedProductsSection,
+  IMAGE_WITH_TEXT: ImageWithTextSection,
+  MARQUEE: MarqueeSection,
   PRODUCT_CAROUSEL: ProductCarouselSection,
   CATEGORIES: CategoriesSection,
   NEWSLETTER: NewsletterSection,
@@ -76,17 +80,44 @@ const isOverlaySection = (section: LayoutSection, resolvedType?: string) => {
   return section.group === 'overlay_group' || (type ? OPTIONAL_OVERLAY_TYPES.has(type) : false);
 };
 
+const isHeaderSection = (section: LayoutSection) =>
+  section.group === 'header_group' || normalizeSectionToken(section.type) === 'HEADER';
+
+const isFooterSection = (section: LayoutSection) =>
+  section.group === 'footer_group' || normalizeSectionToken(section.type) === 'FOOTER';
+
+/** Preserve editor array order within each bucket (matches storefront host sorting). */
+const sortLayoutForRender = (layout: LayoutSection[]): LayoutSection[] => {
+  const withIndex = layout.map((section, idx) => ({ section, idx }));
+
+  const header = withIndex.filter(({ section }) => isHeaderSection(section));
+  const footer = withIndex.filter(({ section }) => isFooterSection(section));
+  const overlay = withIndex.filter(
+    ({ section }) =>
+      !isHeaderSection(section) &&
+      !isFooterSection(section) &&
+      isOverlaySection(section),
+  );
+  const middle = withIndex.filter(
+    ({ section }) =>
+      !isHeaderSection(section) &&
+      !isFooterSection(section) &&
+      !isOverlaySection(section),
+  );
+
+  const byIndex = (a: { idx: number }, b: { idx: number }) => a.idx - b.idx;
+  header.sort(byIndex);
+  middle.sort(byIndex);
+  footer.sort(byIndex);
+  overlay.sort(byIndex);
+
+  return [...header, ...middle, ...footer, ...overlay].map(({ section }) => section);
+};
+
 export const SectionRenderer: React.FC = () => {
   const { layout, settings, activeSectionId } = useThemeConfig();
 
-  // Sort layout by group order: header -> template -> footer -> overlay
-  const sortedLayout = [...layout].sort((a, b) => {
-    const groupOrder = { header_group: 0, template_group: 1, footer_group: 2, overlay_group: 3 };
-    const orderA = groupOrder[a.group as keyof typeof groupOrder] ?? 1;
-    const orderB = groupOrder[b.group as keyof typeof groupOrder] ?? 1;
-    if (orderA !== orderB) return orderA - orderB;
-    return (a.order || 0) - (b.order || 0);
-  });
+  const sortedLayout = sortLayoutForRender(layout);
 
   const renderSection = (section: LayoutSection) => {
     if (section.enabled === false && activeSectionId !== section.id) return null;

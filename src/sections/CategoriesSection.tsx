@@ -96,14 +96,18 @@ const CategoriesSection: React.FC<{ section: any }> = ({ section }) => {
     if (isRtl) {
       const absLeft = Math.abs(scrollLeft);
       if (absLeft < 10) {
+        containerRef.current.style.scrollBehavior = 'auto';
         containerRef.current.scrollLeft = -singleSetWidth;
       } else if (absLeft > (singleSetWidth * 2) - 10) {
+        containerRef.current.style.scrollBehavior = 'auto';
         containerRef.current.scrollLeft = -singleSetWidth;
       }
     } else {
       if (scrollLeft < 10) {
+        containerRef.current.style.scrollBehavior = 'auto';
         containerRef.current.scrollLeft = singleSetWidth;
       } else if (scrollLeft > (singleSetWidth * 2) - 10) {
+        containerRef.current.style.scrollBehavior = 'auto';
         containerRef.current.scrollLeft = singleSetWidth;
       }
     }
@@ -156,6 +160,7 @@ const CategoriesSection: React.FC<{ section: any }> = ({ section }) => {
 
   const scroll = (direction: 'next' | 'prev') => {
     if (!containerRef.current) return;
+    containerRef.current.style.scrollBehavior = 'smooth';
     const { clientWidth } = containerRef.current;
     const amount = clientWidth * 0.8;
     
@@ -212,7 +217,7 @@ const CategoriesSection: React.FC<{ section: any }> = ({ section }) => {
               onMouseUp={onMouseUp}
               onMouseMove={onMouseMove}
               className={enableHorizontalScroll 
-                ? `flex gap-4 sm:gap-6 md:gap-8 overflow-x-auto pb-6 no-scrollbar cursor-grab active:cursor-grabbing ${isDragging ? '' : 'snap-x snap-mandatory'}`
+                ? `flex gap-4 sm:gap-6 md:gap-8 overflow-x-auto pb-6 no-scrollbar cursor-grab active:cursor-grabbing touch-pan-x`
                 : "flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-12"
               }
             >
@@ -221,7 +226,7 @@ const CategoriesSection: React.FC<{ section: any }> = ({ section }) => {
                   type="button"
                   onClick={(e) => handleItemClick(e, cat)}
                   key={`${cat.id || cat.name}-${i}`}
-                  className={`group flex flex-col items-center gap-3 md:gap-6 transition-transform duration-300 hover:-translate-y-2 ${enableHorizontalScroll ? 'snap-center shrink-0' : ''}`}
+                  className={`group flex flex-col items-center gap-3 md:gap-6 transition-transform duration-300 hover:-translate-y-2 ${enableHorizontalScroll ? 'shrink-0' : ''}`}
                   style={{ width: enableHorizontalScroll ? 'auto' : undefined }}
                 >
                   <div 
@@ -289,7 +294,7 @@ const CategoriesSection: React.FC<{ section: any }> = ({ section }) => {
               onMouseUp={onMouseUp}
               onMouseMove={onMouseMove}
               className={enableHorizontalScroll 
-                ? `flex gap-6 overflow-x-auto pb-6 no-scrollbar cursor-grab active:cursor-grabbing ${isDragging ? '' : 'snap-x snap-mandatory'}`
+                ? `flex gap-6 overflow-x-auto pb-6 no-scrollbar cursor-grab active:cursor-grabbing touch-pan-x`
                 : "grid grid-cols-2 md:grid-cols-4 gap-6"
               }
             >
@@ -302,7 +307,7 @@ const CategoriesSection: React.FC<{ section: any }> = ({ section }) => {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
                   viewport={{ once: true }}
-                  className={`group relative h-64 overflow-hidden cursor-pointer shadow-md hover:shadow-2xl transition-all duration-500 ${enableHorizontalScroll ? 'snap-center shrink-0 w-[280px]' : ''}`}
+                  className={`group relative h-64 overflow-hidden cursor-pointer shadow-md hover:shadow-2xl transition-all duration-500 ${enableHorizontalScroll ? 'shrink-0 w-[280px]' : ''}`}
                   style={{ borderRadius }}
                 >
                   {renderCategoryImage(

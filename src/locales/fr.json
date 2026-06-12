@@ -238,5 +238,8 @@
   "empty_state_desc": "Nous n’avons pas trouvé ce que vous cherchez. Essayez d’autres mots-clés ou explorez toute la collection.",
   "empty_state_explore": "Explorer la collection",
   "empty_state_back_home": "Retour à l’accueil",
-  "loading": "Chargement..."
+  "loading": "Chargement...",
+  "single_product_empty": "Veuillez entrer l'URL ou l'ID du produit dans les paramètres de la section",
+  "product_sale_badge": "Promo",
+  "product_view_details": "Voir les détails"
 }

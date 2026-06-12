@@ -79,6 +79,7 @@ const HeaderSection: React.FC<{ section: any }> = ({ section }) => {
     showCart: asBool(content.show_cart, true),
     height: (String(content.height || 'normal') as 'compact' | 'normal' | 'large') || 'normal',
     showLogo: asBool(content.show_logo, true),
+    logoSize: String(content.logo_size || 'medium'),
   };
 
   const isSticky = headerSettings.sticky !== false;
@@ -86,6 +87,13 @@ const HeaderSection: React.FC<{ section: any }> = ({ section }) => {
   const showCart = headerSettings.showCart !== false;
   const heightClass = headerSettings.height === 'compact' ? 'h-16' : headerSettings.height === 'large' ? 'h-24' : 'h-20';
   const showLogo = headerSettings.showLogo !== false;
+
+  const logoSizeClass = {
+    small: 'h-5 md:h-7',
+    medium: 'h-7 md:h-10',
+    large: 'h-10 md:h-14',
+    xlarge: 'h-12 md:h-16',
+  }[headerSettings.logoSize] || 'h-7 md:h-10';
 
   const defaultLinks: NavItem[] = [
     { name: t('nav_home'), href: '/' },
@@ -163,7 +171,7 @@ const HeaderSection: React.FC<{ section: any }> = ({ section }) => {
               <Menu size={24} />
             </button>
 
-            <div className="flex-shrink-0">
+            <div className="flex-shrink-0 min-w-0">
               {showLogo && (
                 <button
                   type="button"
@@ -171,9 +179,9 @@ const HeaderSection: React.FC<{ section: any }> = ({ section }) => {
                   className="flex items-center group transition-transform hover:scale-105"
                 >
                   {displayLogo ? (
-                    <img src={displayLogo} alt={displayName} className="h-10 w-auto object-contain" referrerPolicy="no-referrer" />
+                    <img src={displayLogo} alt={displayName} className={`${logoSizeClass} w-auto max-w-[120px] md:max-w-[250px] object-contain`} referrerPolicy="no-referrer" />
                   ) : (
-                    <span className="text-2xl font-black tracking-tighter uppercase" style={{ color: 'var(--storify-headings)' }}>{displayName}</span>
+                    <span className="text-xl md:text-2xl font-black tracking-tighter uppercase truncate max-w-[120px] md:max-w-[250px]" style={{ color: 'var(--storify-headings)' }}>{displayName}</span>
                   )}
                 </button>
               )}

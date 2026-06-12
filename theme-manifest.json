@@ -276,6 +276,17 @@
           ],
           "default": "true"
         },
+        "logo_size": {
+          "type": "select",
+          "label": "حجم الشعار",
+          "options": [
+            { "value": "small", "label": "صغير" },
+            { "value": "medium", "label": "متوسط" },
+            { "value": "large", "label": "كبير" },
+            { "value": "xlarge", "label": "كبير جداً" }
+          ],
+          "default": "medium"
+        },
         "show_wishlist": {
           "type": "select",
           "label": "إظهار المفضلة",
@@ -599,6 +610,155 @@
             "mode": "all",
             "categoryIds": []
           }
+        }
+      }
+    },
+    {
+      "id": "image_with_text",
+      "name": "صورة مع نص",
+      "component": "IMAGE_WITH_TEXT",
+      "group": "template_group",
+      "contentSchema": {
+        "color_scheme": {
+          "type": "select",
+          "label": "مخطط الألوان",
+          "optionsFrom": "color_schemes",
+          "default": "scheme-light"
+        },
+        "image": {
+          "type": "image",
+          "label": "الصورة"
+        },
+        "title": {
+          "type": "text",
+          "label": "العنوان",
+          "default": "عنوان القسم"
+        },
+        "subtitle": {
+          "type": "textarea",
+          "label": "الوصف",
+          "default": "أضف وصفاً جذاباً هنا لتشجيع العملاء."
+        },
+        "layout_style": {
+          "type": "select",
+          "label": "نمط العرض",
+          "options": [
+            { "value": "image_left", "label": "صورة يسار / تفاصيل يمين" },
+            { "value": "image_right", "label": "صورة يمين / تفاصيل يسار" }
+          ],
+          "default": "image_left"
+        },
+        "button_text": {
+          "type": "text",
+          "label": "نص الزر",
+          "default": "اكتشف المزيد"
+        },
+        "button_link": {
+          "type": "link",
+          "label": "رابط الزر",
+          "default": "/shop"
+        },
+        "padding_top": {
+          "type": "text",
+          "label": "الهامش العلوي",
+          "default": "80px"
+        },
+        "padding_bottom": {
+          "type": "text",
+          "label": "الهامش السفلي",
+          "default": "80px"
+        }
+      }
+    },
+    {
+      "id": "marquee",
+      "name": "شريط متحرك",
+      "component": "MARQUEE",
+      "group": "template_group",
+      "contentSchema": {
+        "color_scheme": {
+          "type": "select",
+          "label": "مخطط الألوان",
+          "optionsFrom": "color_schemes",
+          "default": "scheme-light"
+        },
+        "layout_style": {
+          "type": "select",
+          "label": "نمط التصميم",
+          "options": [
+            { "value": "classic", "label": "كلاسيكي (نص ونقطة)" },
+            { "value": "ticker", "label": "شريط أخبار (خلفية ملونة)" },
+            { "value": "large_outline", "label": "عملاق مفرغ (Outline)" },
+            { "value": "crossed", "label": "شريطين متقاطعين (X-Shape)" },
+            { "value": "slanted", "label": "شريط مائل (Slanted)" }
+          ],
+          "default": "classic"
+        },
+        "speed": {
+          "type": "number",
+          "label": "سرعة الحركة (ثواني)",
+          "default": 20
+        },
+        "direction": {
+          "type": "select",
+          "label": "اتجاه الحركة",
+          "options": [
+            { "value": "auto", "label": "تلقائي (حسب اللغة)" },
+            { "value": "left", "label": "لليسار" },
+            { "value": "right", "label": "لليمين" }
+          ],
+          "default": "auto"
+        },
+        "pause_on_hover": {
+          "type": "select",
+          "label": "إيقاف عند تمرير الماوس",
+          "options": [
+            { "value": "true", "label": "نعم" },
+            { "value": "false", "label": "لا" }
+          ],
+          "default": "true"
+        },
+        "text_size": {
+          "type": "select",
+          "label": "حجم النص",
+          "options": [
+            { "value": "text-sm", "label": "صغير" },
+            { "value": "text-lg", "label": "متوسط" },
+            { "value": "text-2xl", "label": "كبير" },
+            { "value": "text-4xl", "label": "كبير جداً" }
+          ],
+          "default": "text-lg"
+        },
+        "padding_top": {
+          "type": "text",
+          "label": "الهامش العلوي",
+          "default": "20px"
+        },
+        "padding_bottom": {
+          "type": "text",
+          "label": "الهامش السفلي",
+          "default": "20px"
+        },
+        "items": {
+          "type": "repeater",
+          "label": "النصوص",
+          "itemLabel": "نص",
+          "fields": {
+            "text": {
+              "type": "text",
+              "label": "النص",
+              "default": "نص ترويجي جديد"
+            },
+            "link": {
+              "type": "link",
+              "label": "الرابط (اختياري)"
+            }
+          },
+          "default": [
+            { "text": "شحن مجاني للطلبات فوق 500 ريال" },
+            { "text": "خصم 20% على المنتجات الجديدة" },
+            { "text": "ضمان استرجاع خلال 14 يوم" }
+          ]
         }
       }
     },

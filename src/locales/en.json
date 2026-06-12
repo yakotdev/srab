@@ -238,5 +238,8 @@
   "empty_state_desc": "Sorry, we couldn't find what you're looking for. Try changing your search terms or explore the full collection.",
   "empty_state_explore": "Explore collection",
   "empty_state_back_home": "Back to home",
-  "loading": "Loading..."
+  "loading": "Loading...",
+  "single_product_empty": "Please enter a product URL or ID in the section settings",
+  "product_sale_badge": "Sale",
+  "product_view_details": "View Details"
 }

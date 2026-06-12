@@ -205,7 +205,8 @@ const normalizeLayout = (layout: LayoutSection[] = []): LayoutSection[] =>
       id: String(section.id || `${toCanonicalId(sectionDef?.id || resolvedType)}-${index + 1}`),
       type: resolvedType,
       enabled: section.enabled !== false,
-      order: section.order ?? index,
+      // Editor reordering updates array position, not always the order field.
+      order: index,
       group: section.group || sectionDef?.group || 'template_group',
       content: mergedContent,
     };
