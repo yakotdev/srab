@@ -4,6 +4,8 @@ import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { useThemeConfig } from '../ThemeContext';
 import HtmlContent from '../components/HtmlContent';
 import { navigateStorefront, normalizeLinkPath } from '@storify/theme';
+import SectionImagePlaceholder from '../components/SectionImagePlaceholder';
+import { hasSectionImage } from '../utils/sectionImage';
 
 const SlideshowSection: React.FC<{ section: any }> = ({ section }) => {
   const { isRtl, t } = useThemeConfig();
@@ -61,12 +63,16 @@ const SlideshowSection: React.FC<{ section: any }> = ({ section }) => {
       return (
         <div className="flex flex-col md:flex-row h-full w-full bg-white">
           <div className="w-full md:w-1/2 h-1/2 md:h-full relative overflow-hidden">
-            <img 
-              src={slide.image || 'https://picsum.photos/seed/slide/1200/800'} 
-              className="absolute inset-0 w-full h-full object-cover" 
-              alt={slide.heading} 
-              referrerPolicy="no-referrer"
-            />
+            {hasSectionImage(slide.image) ? (
+              <img
+                src={slide.image}
+                className="absolute inset-0 w-full h-full object-cover"
+                alt={slide.heading}
+                referrerPolicy="no-referrer"
+              />
+            ) : (
+              <SectionImagePlaceholder className="absolute inset-0 w-full h-full" />
+            )}
           </div>
           <div className="w-full md:w-1/2 h-1/2 md:h-full flex items-center justify-center p-8 md:p-16">
             <div className="max-w-xl text-start">
@@ -103,13 +109,19 @@ const SlideshowSection: React.FC<{ section: any }> = ({ section }) => {
     return (
       <div className="relative h-full w-full flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <img 
-            src={slide.image || 'https://picsum.photos/seed/slide/1920/1080'} 
-            className="w-full h-full object-cover" 
-            alt={slide.heading} 
-            referrerPolicy="no-referrer"
-          />
-          <div className="absolute inset-0 bg-black/30" />
+          {hasSectionImage(slide.image) ? (
+            <>
+              <img
+                src={slide.image}
+                className="w-full h-full object-cover"
+                alt={slide.heading}
+                referrerPolicy="no-referrer"
+              />
+              <div className="absolute inset-0 bg-black/30" />
+            </>
+          ) : (
+            <SectionImagePlaceholder className="w-full h-full" />
+          )}
         </div>
         <div className="relative z-10 w-full max-w-7xl mx-auto px-6 text-center">
           <motion.div

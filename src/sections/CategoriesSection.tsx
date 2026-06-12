@@ -3,6 +3,8 @@ import { motion } from 'motion/react';
 import { CATEGORIES } from '../constants';
 import { useThemeConfig } from '../ThemeContext';
 import { navigateStorefront } from '@storify/theme';
+import SectionImagePlaceholder from '../components/SectionImagePlaceholder';
+import { hasSectionImage } from '../utils/sectionImage';
 import { useCategories, useResolvedStoreId, useSectionProducts } from '@storify/theme';
 import { applyCategoryScope, parseCategoryScope } from '@storify/theme';
 
@@ -59,7 +61,22 @@ const CategoriesSection: React.FC<{ section: any }> = ({ section }) => {
       return pickLastProductImage(categoryProducts[0]);
     }
 
-    return `https://placehold.co/600x600/f8fafc/cbd5e1?text=${encodeURIComponent(cat.name || 'No Image')}`;
+    return '';
+  };
+
+  const renderCategoryImage = (cat: any, className: string, grayscale = false) => {
+    const src = resolveCategoryImage(cat);
+    if (hasSectionImage(src)) {
+      return (
+        <img
+          src={src}
+          alt={cat.name}
+          className={`${className} ${grayscale ? 'grayscale' : ''}`}
+          referrerPolicy="no-referrer"
+        />
+      );
+    }
+    return <SectionImagePlaceholder className={className} label={cat.name} />;
   };
 
   const containerRef = React.useRef<HTMLDivElement>(null);
@@ -129,12 +146,11 @@ const CategoriesSection: React.FC<{ section: any }> = ({ section }) => {
                 }`}
                 style={{ borderRadius }}
               >
-                <img 
-                  src={resolveCategoryImage(cat)} 
-                  alt={cat.name} 
-                  className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 ${grayscale ? 'grayscale' : ''}`}
-                  referrerPolicy="no-referrer"
-                />
+                {renderCategoryImage(
+                  cat,
+                  `w-full h-full object-cover transition-transform duration-700 group-hover:scale-110`,
+                  grayscale,
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-8 text-end">
                   <h3 className="text-2xl font-extrabold text-white tracking-tighter uppercase">{cat.name}</h3>
                   <p className="text-white/70 text-[10px] font-bold uppercase tracking-widest mt-1">
@@ -167,12 +183,11 @@ const CategoriesSection: React.FC<{ section: any }> = ({ section }) => {
                 >
                   <div className="w-48 h-48 md:w-60 md:h-60 rounded-full overflow-hidden border-2 border-transparent transition-all duration-500 p-2 shadow-sm group-hover:shadow-xl" style={{ background: 'var(--storify-bg)', borderColor: 'var(--storify-border)', '--hover-border': 'var(--storify-primary)' } as any}>
                     <div className="w-full h-full rounded-full overflow-hidden border-2 border-transparent group-hover:border-[var(--storify-primary)] transition-colors duration-500">
-                      <img 
-                        src={resolveCategoryImage(cat)} 
-                        alt={cat.name} 
-                        className={`w-full h-full object-cover rounded-full transition-transform duration-700 group-hover:scale-110 ${grayscale ? 'grayscale' : ''}`}
-                        referrerPolicy="no-referrer"
-                      />
+                      {renderCategoryImage(
+                        cat,
+                        `w-full h-full object-cover rounded-full transition-transform duration-700 group-hover:scale-110`,
+                        grayscale,
+                      )}
                     </div>
                   </div>
                   <div className="text-center">
@@ -239,12 +254,11 @@ const CategoriesSection: React.FC<{ section: any }> = ({ section }) => {
                   className={`group relative h-64 overflow-hidden cursor-pointer shadow-md hover:shadow-2xl transition-all duration-500 ${enableHorizontalScroll ? 'snap-center shrink-0 w-[280px]' : ''}`}
                   style={{ borderRadius }}
                 >
-                  <img
-                    src={resolveCategoryImage(cat)}
-                    alt={cat.name}
-                    className={`w-full h-full object-cover transition duration-700 group-hover:scale-110 ${grayscale ? 'grayscale' : ''}`}
-                    referrerPolicy="no-referrer"
-                  />
+                  {renderCategoryImage(
+                    cat,
+                    `w-full h-full object-cover transition duration-700 group-hover:scale-110`,
+                    grayscale,
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity" />
                   <div className="absolute inset-0 flex flex-col items-center justify-end p-6">
                     <span className="text-white font-black text-2xl uppercase tracking-tighter text-center transform group-hover:scale-110 transition-transform duration-500">

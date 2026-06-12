@@ -277,8 +277,6 @@ const mockConfig: ThemeConfig = {
       enabled: true,
       group: 'template_group',
       content: {
-        image:
-          'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&q=80&w=1920',
         title: S.mock_hero_title,
         subtitle: S.mock_hero_subtitle,
         buttonText: S.mock_hero_cta,

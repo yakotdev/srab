@@ -8,6 +8,8 @@ import {
   buildThemeFontCssVariables, 
   resolveSchemeFromSettings,
 } from '@storify/theme';
+import SectionImagePlaceholder from '../components/SectionImagePlaceholder';
+import { hasSectionImage } from '../utils/sectionImage';
 
 const NewsletterPopup: React.FC<{ section: any }> = ({ section }) => {
   const { isRtl, activeSectionId, settings, t } = useThemeConfig();
@@ -99,17 +101,23 @@ const NewsletterPopup: React.FC<{ section: any }> = ({ section }) => {
 
             {/* Image Section */}
             {content.layout_style !== 'minimal' && (
-              <div className={`${content.layout_style === 'full_bg' ? 'absolute inset-0 w-full' : 'md:w-1/2'} relative bg-neutral-100 overflow-hidden`}>
-                <motion.img 
-                  initial={{ scale: 1.1 }}
-                  animate={{ scale: 1 }}
-                  transition={{ duration: 1.5 }}
-                  src={content.image || "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=1200"} 
-                  alt="Newsletter" 
-                  className="absolute inset-0 w-full h-full object-cover"
-                  referrerPolicy="no-referrer"
-                />
-                <div className={`absolute inset-0 ${content.layout_style === 'full_bg' ? 'bg-black/40' : 'bg-black/5'}`} />
+              <div className={`${content.layout_style === 'full_bg' ? 'absolute inset-0 w-full' : 'md:w-1/2'} relative overflow-hidden`}>
+                {hasSectionImage(content.image) ? (
+                  <>
+                    <motion.img
+                      initial={{ scale: 1.1 }}
+                      animate={{ scale: 1 }}
+                      transition={{ duration: 1.5 }}
+                      src={content.image}
+                      alt="Newsletter"
+                      className="absolute inset-0 w-full h-full object-cover"
+                      referrerPolicy="no-referrer"
+                    />
+                    <div className={`absolute inset-0 ${content.layout_style === 'full_bg' ? 'bg-black/40' : 'bg-black/5'}`} />
+                  </>
+                ) : (
+                  <SectionImagePlaceholder className="absolute inset-0 w-full h-full" />
+                )}
               </div>
             )}
 

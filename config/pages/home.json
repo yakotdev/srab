@@ -12,19 +12,18 @@
     "interval": 5,
     "slides": [
       {
-        "image": "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&q=80&w=1600",
-        "title": "أناقة بلا حدود",
-        "subtitle": "اكتشف أحدث صيحات الموضة والمنتجات الحصرية لدينا.",
+        "title": "مرحباً بكم في متجركم",
+        "subtitle": "اكتشف منتجاتنا وابدأ التسوق بسهولة.",
         "buttonText": "تسوق الآن",
         "link": "/shop",
-        "alignment": "left",
-        "overlayOpacity": "0.1"
+        "alignment": "center",
+        "overlayOpacity": "0.3"
       }
     ]
   },
   "categories": {
-    "title": "تسوق حسب القسم",
-    "subtitle": "استكشف أقسامنا",
+    "title": "الأقسام",
+    "subtitle": "تصفح منتجاتنا حسب القسم",
     "layout_style": "grid",
     "padding_top": "80px",
     "padding_bottom": "80px",
@@ -32,7 +31,7 @@
   },
   "featured_products": {
     "title": "منتجات مميزة",
-    "subtitle": "وصل حديثاً",
+    "subtitle": "مختارات من متجرك",
     "layout_style": "grid",
     "items_per_row": "4",
     "padding_top": "100px",
@@ -42,7 +41,7 @@
   },
   "newsletter": {
     "title": "النشرة البريدية",
-    "subtitle": "اشترك للحصول على تحديثات حصرية",
+    "subtitle": "اشترك لتصلك آخر العروض والتحديثات.",
     "padding_top": "96px",
     "padding_bottom": "96px"
   },

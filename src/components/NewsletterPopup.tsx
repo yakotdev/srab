@@ -41,14 +41,8 @@ const NewsletterPopup: React.FC<NewsletterPopupProps> = ({ isOpen, onClose }) =>
             </button>
 
             {/* Image Section */}
-            <div className="w-full md:w-1/2 aspect-square md:aspect-auto relative bg-neutral-100">
-              <img 
-                src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&q=80&w=1000" 
-                alt="Newsletter" 
-                className="w-full h-full object-cover"
-                referrerPolicy="no-referrer"
-              />
-              <div className="absolute inset-0 bg-brand-primary/10" />
+            <div className="w-full md:w-1/2 aspect-square md:aspect-auto relative border border-dashed border-neutral-200 bg-neutral-50 flex items-center justify-center text-sm text-neutral-400">
+              {t('section_image_placeholder')}
             </div>
 
             {/* Content Section */}

@@ -8,6 +8,8 @@ import {
   buildThemeFontCssVariables, 
   resolveSchemeFromSettings,
 } from '@storify/theme';
+import SectionImagePlaceholder from '../components/SectionImagePlaceholder';
+import { hasSectionImage } from '../utils/sectionImage';
 
 const PromoPopup: React.FC<{ section: any }> = ({ section }) => {
   const { isRtl, activeSectionId, settings, t } = useThemeConfig();
@@ -101,13 +103,17 @@ const PromoPopup: React.FC<{ section: any }> = ({ section }) => {
 
             {/* Side Image */}
             {content.layout_style === 'side_image' && (
-              <div className="md:w-5/12 relative min-h-[200px] md:min-h-full bg-neutral-100">
-                <img 
-                  src={content.image || "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&q=80&w=800"} 
-                  alt="Promo" 
-                  className="absolute inset-0 w-full h-full object-cover"
-                  referrerPolicy="no-referrer"
-                />
+              <div className="md:w-5/12 relative min-h-[200px] md:min-h-full">
+                {hasSectionImage(content.image) ? (
+                  <img
+                    src={content.image}
+                    alt="Promo"
+                    className="absolute inset-0 w-full h-full object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                ) : (
+                  <SectionImagePlaceholder className="absolute inset-0 w-full h-full" />
+                )}
               </div>
             )}
 

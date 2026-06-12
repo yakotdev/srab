@@ -1,7 +1,7 @@
 {
   "name": "@storify/theme-srab",
   "private": true,
-  "version": "1.0.2",
+  "version": "1.0.8",
   "type": "module",
   "description": "Srab — official Storify storefront theme",
   "repository": {

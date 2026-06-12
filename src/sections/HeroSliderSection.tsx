@@ -5,6 +5,8 @@ import { useThemeConfig } from '../ThemeContext';
 import HtmlContent from '../components/HtmlContent';
 
 import { navigateStorefront, normalizeLinkPath } from '@storify/theme';
+import SectionImagePlaceholder from '../components/SectionImagePlaceholder';
+import { hasSectionImage } from '../utils/sectionImage';
 
 const HeroSliderSection: React.FC<{ section: any }> = ({ section }) => {
   const { isRtl, t } = useThemeConfig();
@@ -70,7 +72,10 @@ const HeroSliderSection: React.FC<{ section: any }> = ({ section }) => {
     } as any)
   };
 
+  const getSlideKicker = (slide: any) => String(slide.subtitle_top || '').trim();
+
   const renderSlideContent = (slide: any) => {
+    const kicker = getSlideKicker(slide);
     const align = slide.alignment || 'center';
     let textAlignClass = 'text-center';
     let boxAlign = 'mx-auto';
@@ -89,28 +94,34 @@ const HeroSliderSection: React.FC<{ section: any }> = ({ section }) => {
       return (
         <div className="flex flex-col md:flex-row h-full w-full" style={{ background: 'var(--storify-bg)' }}>
           <div className="w-full md:w-1/2 h-1/2 md:h-full relative overflow-hidden">
-            <img 
-              src={slide.image || 'https://picsum.photos/seed/hero/1200/800'} 
-              className="absolute inset-0 w-full h-full object-cover" 
-              alt={slide.title} 
-              width={1200}
-              height={800}
-              loading="eager"
-              fetchPriority="high"
-              decoding="async"
-              referrerPolicy="no-referrer"
-            />
+            {hasSectionImage(slide.image) ? (
+              <img
+                src={slide.image}
+                className="absolute inset-0 w-full h-full object-cover"
+                alt={slide.title}
+                width={1200}
+                height={800}
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
+                referrerPolicy="no-referrer"
+              />
+            ) : (
+              <SectionImagePlaceholder className="absolute inset-0 w-full h-full" />
+            )}
           </div>
           <div className="w-full md:w-1/2 h-1/2 md:h-full flex items-center justify-center p-8 md:p-16" style={{ background: 'var(--storify-bg)' }}>
             <div className={`max-w-xl ${isRtl ? 'text-right' : 'text-left'}`}>
-              <motion.span 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="inline-block text-xs font-black uppercase tracking-[0.3em] mb-4"
-                style={{ color: 'var(--storify-primary)' }}
-              >
-                {slide.subtitle_top || t('hero_slide_kicker_new')}
-              </motion.span>
+              {kicker && (
+                <motion.span
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="inline-block text-xs font-black uppercase tracking-[0.3em] mb-4"
+                  style={{ color: 'var(--storify-primary)' }}
+                >
+                  {kicker}
+                </motion.span>
+              )}
               <motion.h1 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -162,20 +173,26 @@ const HeroSliderSection: React.FC<{ section: any }> = ({ section }) => {
               className="mb-8"
             >
               <div className="w-24 h-24 mx-auto rounded-full overflow-hidden border-4 shadow-2xl mb-6" style={{ borderColor: 'var(--storify-bg)' }}>
-                <img
-                  src={slide.image || 'https://picsum.photos/seed/minimal/400/400'}
-                  className="w-full h-full object-cover"
-                  alt=""
-                  width={400}
-                  height={400}
-                  loading="eager"
-                  fetchPriority="high"
-                  decoding="async"
-                />
+                {hasSectionImage(slide.image) ? (
+                  <img
+                    src={slide.image}
+                    className="w-full h-full object-cover"
+                    alt=""
+                    width={400}
+                    height={400}
+                    loading="eager"
+                    fetchPriority="high"
+                    decoding="async"
+                  />
+                ) : (
+                  <SectionImagePlaceholder className="w-full h-full" rounded="9999px" />
+                )}
               </div>
-              <span className="text-xs font-black uppercase tracking-[0.4em]" style={{ color: 'var(--storify-text)', opacity: 0.6 }}>
-                {slide.subtitle_top || t('hero_slide_kicker_collection')}
-              </span>
+              {kicker && (
+                <span className="text-xs font-black uppercase tracking-[0.4em]" style={{ color: 'var(--storify-text)', opacity: 0.6 }}>
+                  {kicker}
+                </span>
+              )}
             </motion.div>
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
@@ -212,21 +229,27 @@ const HeroSliderSection: React.FC<{ section: any }> = ({ section }) => {
     return (
       <div className="relative h-full w-full flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <img 
-            src={slide.image || 'https://picsum.photos/seed/classic/1920/1080'} 
-            className="w-full h-full object-cover" 
-            alt={slide.title} 
-            width={1920}
-            height={1080}
-            loading="eager"
-            fetchPriority="high"
-            decoding="async"
-            referrerPolicy="no-referrer"
-          />
-          <div 
-            className="absolute inset-0 bg-black" 
-            style={{ opacity: Number(slide.overlayOpacity) || 0.3 }} 
-          />
+          {hasSectionImage(slide.image) ? (
+            <>
+              <img
+                src={slide.image}
+                className="w-full h-full object-cover"
+                alt={slide.title}
+                width={1920}
+                height={1080}
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
+                referrerPolicy="no-referrer"
+              />
+              <div
+                className="absolute inset-0 bg-black"
+                style={{ opacity: Number(slide.overlayOpacity) || 0.3 }}
+              />
+            </>
+          ) : (
+            <SectionImagePlaceholder className="w-full h-full" />
+          )}
         </div>
         <div className="relative z-10 w-full max-w-7xl mx-auto px-6">
           <div className={`max-w-2xl w-full ${boxAlign} ${textAlignClass}`}>
@@ -235,16 +258,18 @@ const HeroSliderSection: React.FC<{ section: any }> = ({ section }) => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
             >
-              <span
-                className="inline-block px-4 py-1.5 mb-6 text-[10px] font-black tracking-[0.2em] uppercase border rounded-full backdrop-blur-md"
-                style={{
-                  color: 'var(--storify-headings)',
-                  borderColor: 'color-mix(in srgb, var(--storify-headings) 35%, transparent)',
-                  background: 'color-mix(in srgb, var(--storify-headings) 10%, transparent)',
-                }}
-              >
-                {slide.subtitle_top || t('hero_slide_kicker_exclusive')}
-              </span>
+              {kicker && (
+                <span
+                  className="inline-block px-4 py-1.5 mb-6 text-[10px] font-black tracking-[0.2em] uppercase border rounded-full backdrop-blur-md"
+                  style={{
+                    color: 'var(--storify-headings)',
+                    borderColor: 'color-mix(in srgb, var(--storify-headings) 35%, transparent)',
+                    background: 'color-mix(in srgb, var(--storify-headings) 10%, transparent)',
+                  }}
+                >
+                  {kicker}
+                </span>
+              )}
               <h1
                 className="text-5xl md:text-8xl font-black mb-8 leading-[0.9] tracking-tighter drop-shadow-2xl"
                 style={{ color: 'var(--storify-headings)' }}
