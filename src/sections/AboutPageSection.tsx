@@ -1,6 +1,8 @@
 import React from 'react';
 import { useThemeConfig } from '../ThemeContext';
 import { buildSchemeCssVariables, resolveSchemeFromSettings } from '@storify/theme';
+import SectionImagePlaceholder from '../components/SectionImagePlaceholder';
+import { hasSectionImage } from '../utils/sectionImage';
 
 const AboutPageSection: React.FC<{ section: any }> = ({ section }) => {
   const { settings, t } = useThemeConfig();
@@ -34,12 +36,13 @@ const AboutPageSection: React.FC<{ section: any }> = ({ section }) => {
         </div>
 
         <div className="rounded-3xl overflow-hidden mb-16 h-[500px] relative border shadow-xl" style={{ background: 'var(--storify-bg)', borderColor: 'var(--storify-border)' }}>
-          {content.image ? (
+          {hasSectionImage(content.image) ? (
             <img src={content.image} alt={content.title} className="w-full h-full object-cover" />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-sm font-medium opacity-40">
-              {t('about_media_placeholder')}
-            </div>
+            <SectionImagePlaceholder
+              className="w-full h-full"
+              label={t('section_image_placeholder')}
+            />
           )}
           <div className="absolute inset-0 bg-black/5 pointer-events-none" />
         </div>

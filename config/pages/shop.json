@@ -7,17 +7,17 @@
     "show_cart": "true"
   },
   "shop_page": {
-    "kicker": "المجموعة",
+    "kicker": "المتجر",
     "title": "تسوق الكل",
-    "subtitle": "استكشف مجموعتنا المختارة من الأثاث المعماري والديكور البسيط المصمم للمعيشة الحديثة.",
+    "subtitle": "تصفح منتجات المتجر واختر ما يناسبك.",
     "items_per_row": "4",
     "show_advanced_toolbar": "false",
     "show_newsletter": "false",
-    "newsletter_title": "احصل على إلهام التصميم في بريدك",
-    "newsletter_subtitle": "انضم إلى مجتمعنا واحصل على وصول حصري للمجموعات الجديدة، ونصائح التصميم الداخلي، والعروض الخاصة."
+    "newsletter_title": "النشرة البريدية",
+    "newsletter_subtitle": "اشترك لتصلك آخر العروض والتحديثات."
   },
   "footer": {
-    "footer_menu_title": "المساعدة",
+    "footer_menu_title": "المتجر",
     "show_social": "true"
   }
 }

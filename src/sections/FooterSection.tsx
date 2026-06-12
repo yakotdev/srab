@@ -41,6 +41,9 @@ const TiktokIcon: React.FC<SocialIconProps> = ({ size = 20 }) => (
   </svg>
 );
 
+const STORIFY_URL = 'http://storify.it.com/';
+const POWERED_BY_LOGO = 'https://cdn.storify.it.com/powerdbystorify-black.svg';
+
 /** مطابق لروح الفوتر في themes/tempcode/components/store/StoreLayout.tsx */
 const FooterSection = ({ section }: { section: LayoutSection }) => {
   const { store, settings, isRtl, t } = useThemeConfig();
@@ -118,11 +121,7 @@ const FooterSection = ({ section }: { section: LayoutSection }) => {
       ? sectionLegalMenu 
       : defaultLegalLinks;
 
-  const year = new Date().getFullYear();
   const storeName = store?.name || t('store_name');
-  const copyright =
-    content.copyright_text ||
-    t('footer_copyright').replace('{{year}}', String(year)).replace('{{store}}', storeName);
 
   const socialLinks = [
     { icon: Facebook, url: settings?.social_facebook, label: 'فيسبوك' },
@@ -153,7 +152,7 @@ const FooterSection = ({ section }: { section: LayoutSection }) => {
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-16 mb-20">
         
         {/* Store Info Column */}
-        <div className="md:col-span-4 space-y-8">
+        <div className={`space-y-8 ${showNewsletter ? 'md:col-span-4' : 'md:col-span-6'}`}>
           <div>
             {store?.logo && String(store.logo).trim() !== '' ? (
               <img
@@ -231,7 +230,7 @@ const FooterSection = ({ section }: { section: LayoutSection }) => {
         </div>
 
         {/* Quick Links Column */}
-        <div className="md:col-span-2">
+        <div className={showNewsletter ? 'md:col-span-2' : 'md:col-span-3'}>
           <h3 className="font-black text-xs uppercase tracking-[0.2em] mb-10 relative inline-block" style={{ color: 'var(--storify-headings)' }}>
             {content.footer_menu_title || t('footer_quick_links')}
             <span className="absolute -bottom-3 end-0 w-12 h-1 rounded-full" style={{ background: 'var(--storify-primary)' }} />
@@ -261,7 +260,7 @@ const FooterSection = ({ section }: { section: LayoutSection }) => {
         </div>
 
         {/* Support Links Column */}
-        <div className="md:col-span-2">
+        <div className={showNewsletter ? 'md:col-span-2' : 'md:col-span-3'}>
           <h3 className="font-black text-xs uppercase tracking-[0.2em] mb-10 relative inline-block" style={{ color: 'var(--storify-headings)' }}>
             {content.support_menu_title || t('footer_support_center')}
             <span className="absolute -bottom-3 end-0 w-12 h-1 rounded-full" style={{ background: 'var(--storify-primary)' }} />
@@ -291,8 +290,8 @@ const FooterSection = ({ section }: { section: LayoutSection }) => {
         </div>
 
         {/* Newsletter Column */}
-        <div className="md:col-span-4">
-          {showNewsletter && (
+        {showNewsletter && (
+          <div className="md:col-span-4">
             <div className="rounded-[2rem] p-10 border relative overflow-hidden group" style={{ background: 'var(--storify-bg)', borderColor: 'var(--storify-border)' }}>
               <div
                 className="absolute top-0 end-0 w-32 h-32 blur-3xl -me-16 -mt-16 transition-colors"
@@ -364,20 +363,31 @@ const FooterSection = ({ section }: { section: LayoutSection }) => {
                 )}
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       {/* Bottom Bar */}
-      <div className="max-w-7xl mx-auto pt-12 border-t flex flex-col md:flex-row justify-between items-center gap-10" style={{ borderColor: 'var(--storify-border)' }}>
-        <div className="flex flex-col items-center md:items-start gap-4">
-          <div className="opacity-80 text-sm">
-            <p>{copyright}</p>
-          </div>
-          
-          <div className="pt-2">
-            <LanguageSwitcher variant="footer" />
-          </div>
+      <div className="max-w-7xl mx-auto pt-12 border-t flex flex-col md:flex-row justify-between items-center gap-8" style={{ borderColor: 'var(--storify-border)' }}>
+        <div className="flex flex-col items-center md:items-start gap-3 w-full md:w-auto">
+          <a
+            href={STORIFY_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex shrink-0 cursor-pointer"
+            aria-label="Powered by Storify"
+          >
+            <img
+              src={POWERED_BY_LOGO}
+              alt="Powered by Storify"
+              width={200}
+              height={80}
+              className="h-12 sm:h-14 w-auto object-contain"
+              decoding="async"
+            />
+          </a>
+
+          <LanguageSwitcher variant="footer" />
         </div>
         
         <div className="flex flex-wrap gap-x-10 gap-y-4 justify-center md:justify-end text-sm font-bold">

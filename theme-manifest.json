@@ -1,6 +1,6 @@
 {
   "name": "Srab",
-  "version": "1.0.2",
+  "version": "1.0.8",
   "manifestVersion": 1,
   "entry": "assets/main.js",
   "languages": [
@@ -255,7 +255,7 @@
         "top_bar_text": {
           "type": "text",
           "label": "نص الشريط العلوي",
-          "default": "شحن مجاني للطلبات الأكثر من 200 ريال! 🚚"
+          "default": "مرحباً بكم في متجرنا الإلكتروني"
         },
         "height": {
           "type": "select",
@@ -361,8 +361,13 @@
           "maxItems": 10,
           "fields": {
             "image": { "type": "image", "label": "الصورة" },
-            "title": { "type": "text", "label": "العنوان الرئيسي", "default": "أناقة بلا حدود" },
-            "subtitle": { "type": "textarea", "label": "الوصف", "default": "اكتشف أحدث صيحات الموضة والمنتجات الحصرية لدينا." },
+            "subtitle_top": {
+              "type": "text",
+              "label": "التسمية العلوية (شارة فوق العنوان)",
+              "description": "النص الصغير داخل الشارة المستديرة. اتركه فارغاً لإخفائها."
+            },
+            "title": { "type": "text", "label": "العنوان الرئيسي", "default": "مرحباً بكم في متجركم" },
+            "subtitle": { "type": "textarea", "label": "الوصف", "default": "اكتشف منتجاتنا وابدأ التسوق بسهولة." },
             "buttonText": { "type": "text", "label": "نص الزر", "default": "تسوق الآن" },
             "link": { "type": "link", "label": "رابط الزر", "default": "/shop" },
             "alignment": {
@@ -477,12 +482,12 @@
         "title": {
           "type": "text",
           "label": "العنوان",
-          "default": "قطع معمارية"
+          "default": "منتجات مميزة"
         },
         "subtitle": {
           "type": "text",
           "label": "العنوان الفرعي",
-          "default": "وصل حديثاً"
+          "default": "مختارات من متجرك"
         },
         "layout_style": {
           "type": "select",
@@ -831,7 +836,7 @@
         "subtitle": {
           "type": "textarea",
           "label": "الوصف تحت العنوان",
-          "default": "استكشف مجموعتنا المختارة من الأثاث المعماري والديكور البسيط المصمم للمعيشة الحديثة."
+          "default": "تصفح منتجات المتجر واختر ما يناسبك."
         },
         "items_per_row": {
           "type": "select",
@@ -885,12 +890,12 @@
         "newsletter_title": {
           "type": "text",
           "label": "عنوان النشرة",
-          "default": "احصل على إلهام التصميم في بريدك"
+          "default": "النشرة البريدية"
         },
         "newsletter_subtitle": {
           "type": "textarea",
           "label": "وصف النشرة",
-          "default": "انضم إلى مجتمعنا واحصل على وصول حصري للمجموعات الجديدة، ونصائح التصميم الداخلي، والعروض الخاصة."
+          "default": "اشترك لتصلك آخر العروض والتحديثات."
         },
         "show_category_nav": {
           "type": "select",
@@ -1141,7 +1146,7 @@
         "store_description": {
           "type": "textarea",
           "label": "وصف المتجر",
-          "default": "نحن نقدم أفضل المنتجات المعمارية والديكور البسيط المصمم للمعيشة الحديثة. جودة لا تضاهى وتصميمات خالدة."
+          "default": "وصف مختصر عن متجرك يظهر للزوار في الفوتر."
         },
 
         "footer_menu_title": {
@@ -1202,15 +1207,11 @@
         "newsletter_desc": {
           "type": "textarea",
           "label": "وصف النشرة",
-          "default": "اشترك للحصول على تحديثات حصرية ومجموعات جديدة."
+          "default": "اشترك لتصلك آخر العروض والتحديثات."
         },
         "legal_menu": {
           "type": "menu",
           "label": "قائمة الشروط والسياسات (تظهر في الأسفل)"
-        },
-        "copyright_text": {
-          "type": "text",
-          "label": "نص الحقوق أسفل الفوتر (اختياري)"
         }
 
       }
@@ -1228,8 +1229,8 @@
           "optionsFrom": "color_schemes",
           "default": "scheme-light"
         },
-        "title": { "type": "text", "label": "العنوان", "default": "عرض خاص لفترة محدودة! 🔥" },
-        "text": { "type": "textarea", "label": "النص", "default": "احصل على خصم 20% على جميع المنتجات المعمارية عند استخدام كود: ARCH20" },
+        "title": { "type": "text", "label": "العنوان", "default": "عرض خاص" },
+        "text": { "type": "textarea", "label": "النص", "default": "أضف نص العرض الترويجي من إعدادات القسم." },
         "button_text": { "type": "text", "label": "نص الزر", "default": "تسوق الآن" },
         "link": { "type": "link", "label": "الرابط", "default": "/shop" },
         "delay": { "type": "number", "label": "تأخير الظهور (ثواني)", "default": 3, "min": 0 }
@@ -1267,12 +1268,12 @@
           ],
           "default": "discount"
         },
-        "title": { "type": "text", "label": "العنوان", "default": "خصم حصري لك!" },
-        "subtitle": { "type": "textarea", "label": "الوصف", "default": "استخدم الكود أدناه للحصول على خصم إضافي." },
+        "title": { "type": "text", "label": "العنوان", "default": "عنوان النافذة الترويجية" },
+        "subtitle": { "type": "textarea", "label": "الوصف", "default": "أضف وصفاً قصيراً للعرض من إعدادات القسم." },
         "image": { "type": "image", "label": "الصورة" },
         "badge": { "type": "text", "label": "شارة (مثلاً: جديد، خصم 50%)", "default": "" },
-        "code": { "type": "text", "label": "كود الخصم (إذا كان كوبون)", "default": "SAVE25" },
-        "button_text": { "type": "text", "label": "نص الزر", "default": "اطلب الآن" },
+        "code": { "type": "text", "label": "كود الخصم (إذا كان كوبون)", "default": "" },
+        "button_text": { "type": "text", "label": "نص الزر", "default": "تسوق الآن" },
         "link": { "type": "link", "label": "الرابط", "default": "/shop" },
         "secondary_link": { "type": "link", "label": "رابط إضافي (اختياري)", "default": "" },
         "secondary_link_text": { "type": "text", "label": "نص الرابط الإضافي", "default": "معرفة المزيد" },
@@ -1300,12 +1301,12 @@
             { "value": "minimal", "label": "مركزي (بدون صورة)" },
             { "value": "full_bg", "label": "خلفية كاملة" }
           ],
-          "default": "split"
+          "default": "minimal"
         },
-        "title": { "type": "text", "label": "العنوان", "default": "انضم إلى قائمتنا البريدية" },
-        "subtitle": { "type": "textarea", "label": "الوصف", "default": "احصل على آخر التحديثات والعروض الحصرية مباشرة في بريدك." },
+        "title": { "type": "text", "label": "العنوان", "default": "اشترك في نشرتنا" },
+        "subtitle": { "type": "textarea", "label": "الوصف", "default": "أضف وصفاً يشجّع الزوار على الاشتراك في النشرة البريدية." },
         "image": { "type": "image", "label": "الصورة" },
-        "label": { "type": "text", "label": "تسمية علوية", "default": "انضم إلى عالمنا" },
+        "label": { "type": "text", "label": "تسمية علوية", "default": "النشرة البريدية" },
         "buttonText": { "type": "text", "label": "نص الزر", "default": "اشترك الآن" },
         "link": { "type": "link", "label": "الرابط بعد الاشتراك", "default": "/" },
         "delay": { "type": "number", "label": "تأخير الظهور (ثواني)", "default": 3 }

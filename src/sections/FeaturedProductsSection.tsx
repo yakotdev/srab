@@ -173,7 +173,13 @@ const FeaturedProductsSection: React.FC<{ section: any }> = ({ section }) => {
                   style={{ borderRadius: '12px' }}
                   onClick={() => navigateStorefront(`/product/${product.id}`)}
                 >
-                  <img src={product.image} alt={product.name} className="w-full h-full object-cover transition-transform group-hover:scale-110" />
+                  {product.image && String(product.image).trim() !== '' ? (
+                    <img src={product.image} alt={product.name} className="w-full h-full object-cover transition-transform group-hover:scale-110" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-2xl font-black opacity-20">
+                      {product.name?.charAt(0) || '?'}
+                    </div>
+                  )}
                 </div>
                 <div className="flex-1 min-w-0">
                   <span className="text-[10px] font-black uppercase tracking-widest opacity-40 mb-1 block" style={{ color: 'var(--storify-text)' }}>
