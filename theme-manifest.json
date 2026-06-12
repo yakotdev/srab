@@ -470,7 +470,7 @@
         "category_scope": {
           "type": "category_scope",
           "label": "أقسام العرض",
-          "description": "اضغط للاختيار: كل الأقسام، أو التي تحتوي منتجات فقط، أو أقسام محددة من القائمة.",
+          "description": "اضغط للاختيار: كل الأقسام أو أقسام محددة.",
           "default": {
             "mode": "all",
             "categoryIds": []
@@ -758,6 +758,81 @@
             { "text": "شحن مجاني للطلبات فوق 500 ريال" },
             { "text": "خصم 20% على المنتجات الجديدة" },
             { "text": "ضمان استرجاع خلال 14 يوم" }
+          ]
+        }
+      }
+    },
+    {
+      "id": "customer_reviews",
+      "name": "مراجعات العملاء",
+      "component": "CUSTOMER_REVIEWS",
+      "group": "template_group",
+      "contentSchema": {
+        "color_scheme": {
+          "type": "select",
+          "label": "مخطط الألوان",
+          "optionsFrom": "color_schemes",
+          "default": "scheme-light"
+        },
+        "title": {
+          "type": "text",
+          "label": "العنوان",
+          "default": "ماذا يقول عملاؤنا"
+        },
+        "subtitle": {
+          "type": "textarea",
+          "label": "الوصف",
+          "default": "آراء حقيقية من عملائنا."
+        },
+        "source": {
+          "type": "select",
+          "label": "المصدر",
+          "options": [
+            { "value": "manual", "label": "يدوي" },
+            { "value": "products", "label": "تلقائي" },
+            { "value": "combined", "label": "يدوي + تلقائي" }
+          ],
+          "default": "combined"
+        },
+        "layout_style": {
+          "type": "select",
+          "label": "العرض",
+          "options": [
+            { "value": "carousel", "label": "سلايدر" },
+            { "value": "grid", "label": "شبكة" },
+            { "value": "minimal", "label": "قائمة" }
+          ],
+          "default": "carousel"
+        },
+        "max_reviews": {
+          "type": "number",
+          "label": "الحد الأقصى",
+          "default": 12
+        },
+        "padding_top": {
+          "type": "text",
+          "label": "هامش علوي",
+          "default": "80px"
+        },
+        "padding_bottom": {
+          "type": "text",
+          "label": "هامش سفلي",
+          "default": "80px"
+        },
+        "reviews": {
+          "type": "repeater",
+          "label": "مراجعات يدوية",
+          "itemLabel": "مراجعة",
+          "maxItems": 20,
+          "fields": {
+            "customer_name": { "type": "text", "label": "الاسم", "default": "سارة أ." },
+            "rating": { "type": "number", "label": "تقييم", "default": 5 },
+            "comment": { "type": "textarea", "label": "تعليق", "default": "تجربة رائعة!" },
+            "avatar": { "type": "image", "label": "صورة" },
+            "product_name": { "type": "text", "label": "منتج" }
+          },
+          "default": [
+            { "customer_name": "سارة أ.", "rating": 5, "comment": "تجربة رائعة!", "product_name": "منتج مميز" }
           ]
         }
       }

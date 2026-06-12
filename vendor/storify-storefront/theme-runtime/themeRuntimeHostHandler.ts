@@ -217,6 +217,14 @@ export async function handleThemeRuntimeRequest(
       const data = await fetchApi<unknown>(`/reviews?${query.toString()}`);
       return normalizeListResponse<unknown>(data);
     }
+    case 'getStoreReviews': {
+      const p = params as { limit?: number };
+      const limit = Number.isFinite(Number(p?.limit)) ? Math.max(1, Number(p?.limit)) : 50;
+      const query = new URLSearchParams();
+      query.append('status', 'Approved');
+      const data = await fetchApi<unknown>(`/reviews?${query.toString()}`);
+      return normalizeListResponse<unknown>(data).slice(0, limit);
+    }
     case 'getPolicy': {
       const p = params as { slug?: string };
       const slug = typeof p?.slug === 'string' ? p.slug.trim() : '';

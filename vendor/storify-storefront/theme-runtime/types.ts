@@ -14,6 +14,7 @@ export type ThemeRuntimeMethod =
   | 'getCategories'
   | 'getMenu'
   | 'getReviews'
+  | 'getStoreReviews'
   | 'getPolicy'
   | 'getOrderById'
   | 'submitContact'
@@ -60,6 +61,8 @@ export type ThemeRuntimeGetCategoriesParams = { limit?: number };
 export type ThemeRuntimeGetMenuParams = { handle: string };
 
 export type ThemeRuntimeGetReviewsParams = { productId: string };
+
+export type ThemeRuntimeGetStoreReviewsParams = { limit?: number };
 
 export type ThemeRuntimeGetPolicyParams = { slug: string };
 
