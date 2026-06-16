@@ -10,7 +10,7 @@ interface HtmlContentProps {
   fallback?: string;
 }
 
-/** مطابق themes/tempcode/components/store/HtmlContent.tsx */
+/** Matches themes/tempcode/components/store/HtmlContent.tsx */
 const HtmlContent: React.FC<HtmlContentProps> = ({
   html,
   tag: Tag = 'span',

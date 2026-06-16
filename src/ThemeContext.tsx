@@ -20,12 +20,12 @@ export interface StoreInfo {
   metaDescription?: string;
   currency?: string;
   language?: string;
-  /** لغات المتجر المفعّلة من الستورفرونت — تُفضَّل على shipping.localizationLanguages */
+  /** Store languages from the storefront — preferred over shipping.localizationLanguages */
   enabledLanguages?: StorefrontLanguageRow[];
   shipping?: {
     localizationLanguages?: Array<string | StorefrontLanguageRow>;
   };
-  /** من الصفحة الأم عبر postMessage — يُفضّل على طلب SDK من داخل الـ iframe (PNA / توقيت التحميل). */
+  /** From the parent page via postMessage — preferred over loading the SDK inside the iframe (PNA / load timing). */
   policies?: {
     returnExchange?: string;
     privacy?: string;
@@ -38,7 +38,7 @@ export interface StoreInfo {
 export interface LayoutSection {
   id: string;
   type: string;
-  /** يطابق `id` القسم في theme-manifest (مثل featured_products) — يُستخدم لحل مخطط المحتوى بشكل موثوق */
+  /** Matches section `id` in theme-manifest (e.g. featured_products) — used to resolve content schema reliably */
   manifestId?: string;
   enabled: boolean;
   content?: Record<string, any>;

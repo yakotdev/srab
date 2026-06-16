@@ -47,8 +47,8 @@ const ProductCarouselSection: React.FC<{ section: any }> = ({ section }) => {
       const gap = window.innerWidth >= 768 ? 32 : 16;
       const step = cardWidth + gap;
       
-      // في RTL، scrollBy({ left: step }) يتجه لليسار (التالي)
-      // و scrollBy({ left: -step }) يتجه لليمين (السابق)
+      // In RTL, scrollBy({ left: step }) moves left (next)
+      // and scrollBy({ left: -step }) moves right (previous)
       const delta = direction === 'next' ? step : -step;
       container.scrollBy({ left: delta, behavior: 'smooth' });
     }

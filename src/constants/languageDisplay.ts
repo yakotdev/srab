@@ -1,10 +1,11 @@
 /**
- * عرض اللغة في مبدّل اللغة: اسم إنجليزي، اسم محلي، علم، ورمز ISO (متطابق تقريباً مع COMMON_LANGUAGES في الإدارة).
+ * Language display for the switcher: English name, native name, flag, and ISO code
+ * (aligned with COMMON_LANGUAGES in admin).
  */
 export type LanguageDisplayRow = {
   name: string;
   nativeName: string;
-  /** علم تقريبي للمنطقة/الدولة الأكثر شيوعاً للغة */
+  /** Approximate flag for the most common region/country for the language */
   flag: string;
 };
 
@@ -81,7 +82,7 @@ const LANGUAGE_DISPLAY_BY_CODE: Record<string, LanguageDisplayRow> = {
   'zh-hant': { name: 'Chinese (Traditional)', nativeName: '繁體中文', flag: '🇹🇼' },
 };
 
-/** رمز اللغة للعرض (مثل AR، ZH-HANS، EN-US). */
+/** Display language code label (e.g. AR, ZH-HANS, EN-US). */
 function formatCodeLabel(code: string): string {
   return code
     .trim()
@@ -93,7 +94,7 @@ function formatCodeLabel(code: string): string {
     .join('-');
 }
 
-/** يدمج بيانات المتجر (nativeName) إن وُجدت مع القاموس الثابت. */
+/** Merge store data (nativeName) when available with the static dictionary. */
 export function getLanguageDisplay(
   codeRaw: string,
   rowFromStore?: { name?: string; nativeName?: string | null } | null,

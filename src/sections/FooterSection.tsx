@@ -44,7 +44,7 @@ const TiktokIcon: React.FC<SocialIconProps> = ({ size = 20 }) => (
 const STORIFY_URL = 'http://storify.it.com/';
 const POWERED_BY_LOGO = 'https://cdn.storify.it.com/powerdbystorify-black.svg';
 
-/** مطابق لروح الفوتر في themes/tempcode/components/store/StoreLayout.tsx */
+/** Matches the footer pattern in themes/tempcode/components/store/StoreLayout.tsx */
 const FooterSection = ({ section }: { section: LayoutSection }) => {
   const { store, settings, isRtl, t } = useThemeConfig();
   const content = section.content || {};
@@ -93,12 +93,12 @@ const FooterSection = ({ section }: { section: LayoutSection }) => {
     { name: t('policy_slug_terms'), href: '/policies/terms' },
   ];
 
-  // القوائم الجديدة من محتوى القسم
+  // Menus from section content (current schema)
   const sectionFooterMenu = useMenu(content.footer_menu);
   const sectionSupportMenu = useMenu(content.support_menu);
   const sectionLegalMenu = useMenu(content.legal_menu);
 
-  // القوائم القديمة (للتوافق)
+  // Legacy menu keys (backward compatibility)
   const globalFooterCol1 = useMenu(settings?.footer_col_1);
   const primaryMenuItems = useMenu(settings?.nav_primary);
   

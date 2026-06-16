@@ -5,7 +5,7 @@ export interface ProductOption {
 
 export interface ProductVariant {
   id: string;
-  /** API returns `title` (e.g. "أحمر / كبير"); theme mock data uses `name`. */
+  /** API returns `title` (e.g. "Red / Large"); theme mock data uses `name`. */
   title?: string;
   name?: string;
   price?: number;
@@ -67,7 +67,7 @@ export interface Category {
   productCount?: number;
 }
 
-/** بيانات تجريبية للمعاينة المحلية فقط — بدون صور افتراضية */
+/** Mock data for local preview only — no default images */
 export const PRODUCTS: Product[] = [
   { id: '1', name: 'منتج تجريبي ١', price: 99, category: 'قسم ١', image: '', isNew: true },
   { id: '2', name: 'منتج تجريبي ٢', price: 149, category: 'قسم ١', image: '' },

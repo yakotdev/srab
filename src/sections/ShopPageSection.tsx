@@ -244,7 +244,7 @@ const ShopPageSection: React.FC<{ section: { content?: Record<string, unknown> }
     ? filteredProducts.slice(0, visibleCount)
     : filteredProducts;
 
-  /** هاتف: عمودان | تابلت: 3 | سطح مكتب: حسب items_per_row */
+  /** Mobile: 2 cols | tablet: 3 | desktop: per items_per_row */
   const gridColsLg =
     {
       2: 'lg:grid-cols-2',
@@ -288,7 +288,7 @@ const ShopPageSection: React.FC<{ section: { content?: Record<string, unknown> }
 
   return (
     <div className="pt-8 pb-24" style={{ background: 'var(--storify-bg)', color: 'var(--storify-text)' }}>
-      {/* مطابق لـ themes/tempcode Shop: عنوان، وصف، بحث، فلاتر أقسام كبills */}
+      {/* Matches themes/tempcode Shop: title, description, search, category filter pills */}
       <section className="max-w-7xl mx-auto px-6 py-12">
         <div className="text-center mb-16">
           {searchQuery ? (

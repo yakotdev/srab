@@ -4,7 +4,7 @@ import ProductCard from '../components/ProductCard';
 import { navigateStorefront } from '@storify/theme';
 import { useThemeConfig } from '../ThemeContext';
 
-/** مطابق لـ themes/tempcode/pages/store/Wishlist.tsx */
+/** Matches themes/tempcode/pages/store/Wishlist.tsx */
 const WishlistPageSection: React.FC<{ section: { content?: Record<string, unknown> } }> = () => {
   const { wishlist: ctxWishlist, onAddToCart, onToggleWishlist, t } = useThemeConfig();
   const wishlist = ctxWishlist ?? [];

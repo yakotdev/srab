@@ -117,7 +117,7 @@ const normalizeSectionContent = (
   content: Record<string, any> = {},
 ): Record<string, any> => {
   const input = content && typeof content === 'object' && !Array.isArray(content) ? content : {};
-  /** بدون مخطط لا نُصفّر المحتوى الوارد (مثلاً إن فشل حل نوع القسم). */
+  /** Without a schema, do not wipe incoming content (e.g. when section type resolution fails). */
   if (!schema || Object.keys(schema).length === 0) {
     return { ...input };
   }

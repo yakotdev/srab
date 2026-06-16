@@ -7,44 +7,44 @@
 <h1 align="center">Srab</h1>
 
 <p align="center">
-  ثيم متجر رسمي لمنصة <strong>Storify</strong> — واجهة عربية أولاً، أقسام غنية، وقابلية تخصيص كاملة من محرر الثيمات.
+  Official <strong>Storify</strong> storefront theme — Arabic-first UI, rich sections, and full customization from the theme editor.
 </p>
 
 <p align="center">
-  <a href="https://storify.it.com/developers/themes/introduction"><strong>وثائق تطوير الثيمات</strong></a>
+  <a href="https://storify.it.com/developers/themes/introduction"><strong>Theme developer documentation</strong></a>
 </p>
 
 ---
 
-## تجهيز الثيم للرفع
+## Package for upload
 
 ```bash
 npm install
 npm run zip
 ```
 
-ينتج الملف **`srab-theme.zip`** في جذر المشروع. من لوحة تحكم Storify: **الثيمات المرفوعة** → رفع ثيم → اختر الملف → **استخدام هذا الثيم**.
+This produces **`srab-theme.zip`** in the project root. In the Storify admin: **Uploaded themes** → Upload theme → select the file → **Use this theme**.
 
-## التطوير المحلي
+## Local development
 
 ```bash
-npm run dev          # معاينة محلية
-npm run sync         # مزامنة مع متجر Storify
-npm run build        # بناء dist/
-npm run lint         # فحص TypeScript
+npm run dev          # Local preview
+npm run sync         # Sync with a Storify store
+npm run build        # Build dist/
+npm run lint         # TypeScript check
 ```
 
-## هيكل المشروع
+## Project structure
 
-| المسار | الوصف |
-|--------|--------|
-| `theme-manifest.json` | تعريف الأقسام، الصفحات، وإعدادات الثيم |
-| `config/pages/` | المحتوى الافتراضي لكل صفحة |
-| `src/sections/` | مكوّنات الأقسام |
-| `public/locales/` | ترجمات الواجهة (عربي، إنجليزي، فرنسي) |
+| Path | Description |
+|------|-------------|
+| `theme-manifest.json` | Section, page, and theme setting definitions |
+| `config/pages/` | Default content per page |
+| `src/sections/` | Section components |
+| `public/locales/` | UI translations (Arabic, English, French) |
 
-للتفاصيل التقنية الكاملة — بناء الثيم، الـ manifest، الـ SDK، والرفع — راجع **[دليل المطوّرين على Storify](https://storify.it.com/developers/themes/introduction)**.
+For the full technical guide — building the theme, manifest, SDK, and upload — see the **[Storify developer docs](https://storify.it.com/developers/themes/introduction)**.
 
-## الترخيص
+## License
 
-ثيم خاص بمنصة Storify. الاستخدام وفق شروط المنصة.
+Storify platform theme. Use is subject to the platform terms.
