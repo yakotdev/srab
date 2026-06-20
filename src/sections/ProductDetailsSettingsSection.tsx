@@ -22,7 +22,14 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useThemeConfig } from '../ThemeContext';
-import { useProduct, useSectionProducts, formatPrice, fetchProductReviews } from '@storify/theme';
+import {
+  useProduct,
+  useSectionProducts,
+  formatPrice,
+  fetchProductReviews,
+  formatProductPriceLabel,
+  resolveProductDetailPrice,
+} from '@storify/theme';
 import { getMaxOrderableQuantity } from '@storify/theme';
 import {
   findSelectedVariant,
@@ -331,8 +338,14 @@ const ProductDetailsSettingsSection: React.FC<{ section: any }> = ({ section }) 
   const mainImage = selectedImage || images[0] || '';
   const isWishlisted = wishlist?.some((p) => p && p.id === product.id) || false;
 
-  const currentPrice = selectedVariant?.price ?? product.price ?? 0;
-  const currentCompareAtPrice = selectedVariant?.compareAtPrice ?? product.compareAtPrice;
+  const detailPrice = resolveProductDetailPrice(product, selectedVariant);
+  const formatPriceRange = (min: string, max: string) =>
+    interpolateTheme(t('product_price_range'), { min, max });
+  const priceLabel = selectedVariant
+    ? formatPrice(detailPrice.price, store?.currency)
+    : formatProductPriceLabel(product, store?.currency, { formatRange: formatPriceRange });
+  const currentPrice = detailPrice.price;
+  const currentCompareAtPrice = detailPrice.showCompareAt ? detailPrice.compareAtPrice : undefined;
 
   const hasVariants = Array.isArray(product.variants) && product.variants.length > 0;
   const needsVariantSelection = hasVariants && visibleOptions.length > 0;
@@ -447,10 +460,10 @@ const ProductDetailsSettingsSection: React.FC<{ section: any }> = ({ section }) 
             </button>
           </>
         )}
-        {currentCompareAtPrice != null && currentCompareAtPrice > currentPrice && (
+        {detailPrice.showDiscount && (
           <div className="absolute top-6 start-6 bg-red-500 text-white px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest shadow-lg z-10">
             {interpolateTheme(t('product_save_pct'), {
-              percent: Math.round(((currentCompareAtPrice - currentPrice) / currentCompareAtPrice) * 100),
+              percent: detailPrice.discountPercentage,
             })}
           </div>
         )}
@@ -505,8 +518,8 @@ const ProductDetailsSettingsSection: React.FC<{ section: any }> = ({ section }) 
       </div>
 
       <div className="flex items-baseline gap-4">
-        <span className="text-4xl font-black text-brand-accent">{formatPrice(currentPrice, store?.currency)}</span>
-        {currentCompareAtPrice != null && currentCompareAtPrice > currentPrice && (
+        <span className="text-4xl font-black text-brand-accent">{priceLabel}</span>
+        {detailPrice.showCompareAt && currentCompareAtPrice != null && (
           <span className="text-neutral-300 line-through text-xl font-bold">{formatPrice(currentCompareAtPrice, store?.currency)}</span>
         )}
       </div>

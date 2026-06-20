@@ -144,3 +144,56 @@ export function getProductDiscountPercentage(product: ProductPriceSource): numbe
   if (display.compareAtPrice == null || display.compareAtPrice <= display.price) return 0;
   return Math.round(((display.compareAtPrice - display.price) / display.compareAtPrice) * 100);
 }
+
+export type ProductDetailPriceView = {
+  price: number;
+  minPrice: number;
+  maxPrice: number;
+  isRange: boolean;
+  compareAtPrice?: number;
+  showCompareAt: boolean;
+  showDiscount: boolean;
+  discountPercentage: number;
+};
+
+/** Product page / quick view: variant compare-at only when set on the variant; never treat a multi-variant price spread as a sale. */
+export function resolveProductDetailPrice(
+  product: ProductPriceSource,
+  selectedVariant?: { price?: number; compareAtPrice?: number } | null,
+): ProductDetailPriceView {
+  if (selectedVariant) {
+    const price = Number(selectedVariant.price) || 0;
+    const compareAt =
+      selectedVariant.compareAtPrice != null ? Number(selectedVariant.compareAtPrice) : undefined;
+    const showDiscount =
+      compareAt != null && Number.isFinite(compareAt) && compareAt > price;
+
+    return {
+      price,
+      minPrice: price,
+      maxPrice: price,
+      isRange: false,
+      compareAtPrice: showDiscount ? compareAt : undefined,
+      showCompareAt: showDiscount,
+      showDiscount,
+      discountPercentage: showDiscount
+        ? Math.round(((compareAt! - price) / compareAt!) * 100)
+        : 0,
+    };
+  }
+
+  const display = getProductPriceDisplay(product);
+  const showDiscount =
+    display.hasDiscount && !display.isRange && !display.compareAtIsRange;
+
+  return {
+    price: display.price,
+    minPrice: display.minPrice,
+    maxPrice: display.maxPrice,
+    isRange: display.isRange,
+    compareAtPrice: showDiscount ? display.compareAtPrice : undefined,
+    showCompareAt: showDiscount && display.compareAtPrice != null,
+    showDiscount,
+    discountPercentage: showDiscount ? getProductDiscountPercentage(product) : 0,
+  };
+}

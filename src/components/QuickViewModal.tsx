@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, ShoppingBag, Heart, Star, Share2 } from 'lucide-react';
 import { Product, ProductVariant } from '../constants';
-import { formatPrice } from '@storify/theme';
+import { formatPrice, formatProductPriceLabel, resolveProductDetailPrice } from '@storify/theme';
 import { getMaxOrderableQuantity } from '@storify/theme';
 import {
   findSelectedVariant,
@@ -14,6 +14,7 @@ import {
 import { useThemeConfig } from '../ThemeContext';
 import { productImageAspectClass, productImageObjectFitClass } from '@storify/theme';
 import { prepareHtmlContent } from '@storify/theme';
+import { interpolateTheme } from '../locales';
 
 const COLOR_META_OPTION_NAME = '__color_meta__';
 const COLOR_OPTION_NAMES = ['color', 'colour', 'اللون', 'لون', 'الوان', 'ألوان'];
@@ -108,8 +109,14 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({
   if (!product) return null;
 
   const isWishlisted = wishlist.some(p => p && p.id === product.id);
-  const currentPrice = selectedVariant?.price ?? product.price ?? 0;
-  const currentCompareAtPrice = selectedVariant?.compareAtPrice ?? product.compareAtPrice;
+  const detailPrice = resolveProductDetailPrice(product, selectedVariant);
+  const formatPriceRange = (min: string, max: string) =>
+    interpolateTheme(t('product_price_range'), { min, max });
+  const priceLabel = selectedVariant
+    ? formatPrice(detailPrice.price, store?.currency)
+    : formatProductPriceLabel(product, store?.currency, { formatRange: formatPriceRange });
+  const currentPrice = detailPrice.price;
+  const currentCompareAtPrice = detailPrice.showCompareAt ? detailPrice.compareAtPrice : undefined;
 
   const hasVariants = Array.isArray(product.variants) && product.variants.length > 0;
   const needsVariantSelection = hasVariants && visibleOptions.length > 0;
@@ -206,9 +213,9 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({
                 className={`w-full h-full ${productFitClass}`}
                 referrerPolicy="no-referrer"
               />
-              {currentCompareAtPrice != null && currentCompareAtPrice > currentPrice && (
+              {detailPrice.showDiscount && (
                 <div className="absolute top-6 start-6 bg-red-500 text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg">
-                  {t('product_save_pct').replace('{{percent}}', String(Math.round(((currentCompareAtPrice - currentPrice) / currentCompareAtPrice) * 100)))}
+                  {interpolateTheme(t('product_save_pct'), { percent: detailPrice.discountPercentage })}
                 </div>
               )}
             </div>
@@ -236,10 +243,10 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({
                     {selectedVariant?.name || product.name}
                   </h2>
                   <div className="flex items-center justify-end gap-3 md:gap-4">
-                    {currentCompareAtPrice != null && currentCompareAtPrice > currentPrice && (
+                    {detailPrice.showCompareAt && currentCompareAtPrice != null && (
                       <span className="text-lg md:text-xl text-neutral-300 line-through font-bold">{formatPrice(currentCompareAtPrice, store?.currency)}</span>
                     )}
-                    <span className="text-2xl md:text-3xl font-black text-brand-accent">{formatPrice(currentPrice, store?.currency)}</span>
+                    <span className="text-2xl md:text-3xl font-black text-brand-accent">{priceLabel}</span>
                   </div>
                 </div>
 
